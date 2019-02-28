@@ -14,7 +14,7 @@ defmodule PFDS.Chapter2 do
     alias PFDS.Ordered
 
     @type elem :: term
-    @type tree :: :empty | {tree, elem, tree}
+    @opaque tree :: :empty | {tree, elem, tree}
     @type set :: tree
 
     @spec member(elem, tree()) :: bool()
