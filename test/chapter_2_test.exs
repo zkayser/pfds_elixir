@@ -5,7 +5,7 @@ defmodule PFDS.Chapter2Test do
 
   @left_sub_tree { :empty, 4, :empty }
   @root_node 5
-  @right_sub_tree { :empty, 6, { :empty, 7, :empty } }
+  @right_sub_tree { :empty, 6, { :empty, 7, { :empty, 8, :empty } } }
   @a_tree { @left_sub_tree, @root_node, @right_sub_tree }
 
   describe "suffixes/1" do
@@ -36,6 +36,21 @@ defmodule PFDS.Chapter2Test do
 
     test "places the element to be inserted in the right sub tree if larger than the root node" do
       assert { :empty, 4, { :empty, 5, :empty }} = UnbalancedSet.insert(5, @left_sub_tree)
+    end
+  end
+
+  describe "efficient_member/2" do
+    test "returns true if the query element is in the tree" do
+      assert UnbalancedSet.efficient_member(5, @a_tree)
+      assert UnbalancedSet.efficient_member(4, @a_tree)
+      assert UnbalancedSet.efficient_member(6, @a_tree)
+      assert UnbalancedSet.efficient_member(7, @a_tree)
+    end
+
+    test "returns false if the query element is not in the tree" do
+      refute UnbalancedSet.efficient_member(1, @a_tree)
+      refute UnbalancedSet.efficient_member(0, @a_tree)
+      refute UnbalancedSet.efficient_member(100, @a_tree)
     end
   end
 end
