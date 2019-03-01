@@ -13,28 +13,28 @@ defmodule PFDS.Chapter2 do
   defmodule UnbalancedSet do
     alias PFDS.Ordered
 
-    @type elem :: term
-    @opaque tree :: :empty | {tree, elem, tree}
-    @type set :: tree
+    @type el() :: term()
+    @opaque tree() :: :empty | {tree, el, tree}
+    @type set() :: tree
 
-    @spec member(elem, tree()) :: bool()
-    def member(_, :empty), do: false
-    def member(el, {left, root, right}) do
+    @spec member?(el, tree()) :: bool()
+    def member?(_, :empty), do: false
+    def member?(el, {left, root, right}) do
       cond do
-        Ordered.lt(el, root) -> member(el, left)
-        Ordered.lt(root, el) -> member(el, right)
+        Ordered.lt(el, root) -> member?(el, left)
+        Ordered.lt(root, el) -> member?(el, right)
         true -> true
       end
     end
-  end
 
-  @spec insert(elem, tree) :: tree()
-  def insert(el, :empty), do: {:empty, el, :empty}
-  def insert(el, {left, root, right} = tree) do
-    cond do
-      Ordered.lt(el, root) -> {insert(el, left), root, right}
-      Ordered.lt(root, el) -> {left, root, insert(el, right)}
-      true -> tree
+    @spec insert(el, tree) :: tree()
+    def insert(el, :empty), do: {:empty, el, :empty}
+    def insert(el, {left, root, right} = tree) do
+      cond do
+        Ordered.lt(el, root) -> {insert(el, left), root, right}
+        Ordered.lt(root, el) -> {left, root, insert(el, right)}
+        true -> tree
+      end
     end
   end
 end
