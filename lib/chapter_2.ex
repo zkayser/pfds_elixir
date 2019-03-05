@@ -2,7 +2,6 @@ defmodule PFDS.Chapter2 do
   @type el() :: term()
   @opaque tree() :: :empty | {tree, el, tree}
 
-
   @spec suffixes(list(any())) :: list(list(any()))
   def suffixes(list) do
     do_suffixes(list, [])
@@ -18,7 +17,7 @@ defmodule PFDS.Chapter2 do
     alias PFDS.Ordered
     alias PFDS.Chapter2
 
-    @spec member?(Chapter2.el, Chapter2.tree()) :: bool()
+    @spec member?(Chapter2.el(), Chapter2.tree()) :: bool()
     def member?(_, :empty), do: false
 
     def member?(el, {left, root, right}) do
@@ -43,7 +42,7 @@ defmodule PFDS.Chapter2 do
     it significantly more performant than the naive implementation of `member?/2` above while maintaining its
     behavior.
     """
-    @spec efficient_member(Chapter2.el, Chapter2.tree()) :: bool()
+    @spec efficient_member(Chapter2.el(), Chapter2.tree()) :: bool()
     def efficient_member(el, tree) do
       case tree do
         :empty -> false
@@ -59,7 +58,7 @@ defmodule PFDS.Chapter2 do
 
     defp handle_member(el, {_, root, right}, _), do: handle_member(el, right, root)
 
-    @spec insert(Chapter2.el, Chapter2.tree()) :: Chapter2.tree()
+    @spec insert(Chapter2.el(), Chapter2.tree()) :: Chapter2.tree()
     def insert(el, :empty), do: {:empty, el, :empty}
 
     def insert(el, {left, root, right} = tree) do
@@ -87,7 +86,8 @@ defmodule PFDS.Chapter2 do
     copied nodes are indistinguishable from the originals. Rewrite `insert` using exceptions to avoid this copying.
     Establish one handler per insertion rather than per iteration.
     """
-    @spec efficient_insert(Chapter2.el, Chapter2.tree()) :: {:ok, Chapter2.tree()} | {:existing_element, Chapter2.tree()}
+    @spec efficient_insert(Chapter2.el(), Chapter2.tree()) ::
+            {:ok, Chapter2.tree()} | {:existing_element, Chapter2.tree()}
     def efficient_insert(el, tree) do
       try do
         {:ok, handle_efficient_insert(el, tree)}
@@ -115,7 +115,7 @@ defmodule PFDS.Chapter2 do
     of insert that performs no unnecessary copying and uses no more than
     d + 1 comparisons
     """
-    @spec optimized_insert(Chapter2.el, Chapter2.tree()) :: Chapter2.tree()
+    @spec optimized_insert(Chapter2.el(), Chapter2.tree()) :: Chapter2.tree()
     def optimized_insert(el, tree), do: optimized_insert_(el, nil, tree)
     defp optimized_insert_(el, el, :empty), do: raise(ExistingElementException, el)
     defp optimized_insert_(el, _prev, :empty), do: {:empty, el, :empty}
@@ -141,9 +141,10 @@ defmodule PFDS.Chapter2 do
   """
   @spec complete(el, non_neg_integer()) :: tree()
   def complete(_x, 0), do: :empty
+
   def complete(x, d) do
     sub_tree = complete(x, d - 1)
-    { sub_tree, x, sub_tree }
+    {sub_tree, x, sub_tree}
   end
 
   @doc """
@@ -154,22 +155,26 @@ defmodule PFDS.Chapter2 do
   the two subtrees should differ in size by at most one. This function should run in `O(log n)` time.
   """
   def balanced(_x, 0), do: :empty
+
   def balanced(x, size) do
     {sub_tree_1, sub_tree_2} = create_2(x, div(size - 1, 2))
+
     case rem(size, 2) == 0 do
-      true -> { sub_tree_1, x, sub_tree_2 }
-      false -> { sub_tree_1, x, sub_tree_1 }
+      true -> {sub_tree_1, x, sub_tree_2}
+      false -> {sub_tree_1, x, sub_tree_1}
     end
   end
 
   defp create_2(_x, size) when size < 0, do: {:empty, :empty}
   defp create_2(x, 0), do: {:empty, {:empty, x, :empty}}
+
   defp create_2(x, size) when rem(size, 2) != 0 do
-    { sub_tree_1, sub_tree_2 } = create_2(x, div(size - 1, 2))
-    { { sub_tree_1, x, sub_tree_1}, { sub_tree_1, x, sub_tree_2 } }
+    {sub_tree_1, sub_tree_2} = create_2(x, div(size - 1, 2))
+    {{sub_tree_1, x, sub_tree_1}, {sub_tree_1, x, sub_tree_2}}
   end
+
   defp create_2(x, size) do
-    { sub_tree_1, sub_tree_2 } = create_2(x, div(size - 2, 2))
-    { {sub_tree_1, x, sub_tree_2}, {sub_tree_2, x, sub_tree_2} }
+    {sub_tree_1, sub_tree_2} = create_2(x, div(size - 2, 2))
+    {{sub_tree_1, x, sub_tree_2}, {sub_tree_2, x, sub_tree_2}}
   end
 end
