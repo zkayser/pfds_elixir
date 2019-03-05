@@ -22,3 +22,6 @@ erl_crash.dump
 # Ignore package tarball (built via "mix hex.build").
 pfds_elixir-*.tar
 
+# Dev environment artifacts
+.elixir_ls
+
