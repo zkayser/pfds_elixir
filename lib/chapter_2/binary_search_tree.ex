@@ -11,7 +11,7 @@ defmodule BinarySearchTree do
   sense for the set abstraction, but it can be a useful auxilary function for other abstractions, such
   as bags.) This function should run in `O(d)` time.
   """
-  @spec complete(Chapter2.el, integer()) :: Chapter2.tree()
+  @spec complete(Chapter2.el(), integer()) :: Chapter2.tree()
   def complete(_x, 0), do: :empty
 
   def complete(x, d) do
@@ -26,7 +26,7 @@ defmodule BinarySearchTree do
   not always be complete binary trees, but should be as balanced as possible: for any given node,
   the two subtrees should differ in size by at most one. This function should run in `O(log n)` time.
   """
-  @spec balanced(Chapter2.el, integer) :: Chapter2.tree()
+  @spec balanced(Chapter2.el(), integer) :: Chapter2.tree()
   def balanced(_x, 0), do: :empty
 
   def balanced(x, size) do
