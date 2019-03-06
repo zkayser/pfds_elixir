@@ -1,18 +1,10 @@
-defmodule PFDS.Chapter2Test do
+defmodule UnbalancedSetTest do
   use ExUnit.Case
-  import PFDS.Chapter2
-  alias PFDS.Chapter2.UnbalancedSet
 
   @left_sub_tree {:empty, 4, :empty}
   @root_node 5
   @right_sub_tree {:empty, 6, {:empty, 7, {:empty, 8, :empty}}}
   @a_tree {@left_sub_tree, @root_node, @right_sub_tree}
-
-  describe "suffixes/1" do
-    test "returns a list of all the suffixes of xs in descending order of length" do
-      assert suffixes([1, 2, 3, 4]) == [[1, 2, 3, 4], [2, 3, 4], [3, 4], [4], []]
-    end
-  end
 
   describe "member?/2" do
     test "returns true if the query element is in the tree" do
@@ -74,28 +66,9 @@ defmodule PFDS.Chapter2Test do
     end
 
     test "raises ExistingElementException when inserting an existing element" do
-      assert_raise(PFDS.Chapter2.UnbalancedSet.ExistingElementException, fn ->
+      assert_raise(UnbalancedSet.ExistingElementException, fn ->
         UnbalancedSet.optimized_insert(6, @a_tree)
       end)
-    end
-  end
-
-  describe "complete/2" do
-    test "creates a complete binary tree of depth d with element x stored in every node" do
-      {x, d} = {1, 4}
-      assert {left, 1, right} = complete(x, d)
-      assert left == right
-      assert {level_2_left, 1, level_2_right} = left
-      assert {level_3_left, 1, level_3_right} = level_2_left
-      assert {level_4_left, 1, level_4_right} = level_3_left
-      assert :empty = level_4_left
-    end
-  end
-
-  describe "create/2" do
-    test "creates balanced trees of arbitrary size, s" do
-      assert {{:empty, 1, :empty}, 1, {:empty, 1, :empty}} == balanced(1, 3)
-      assert {:empty, 1, {:empty, 1, :empty}} == balanced(1, 2)
     end
   end
 end
