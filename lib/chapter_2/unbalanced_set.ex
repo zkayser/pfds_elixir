@@ -144,7 +144,6 @@ defimpl Enumerable, for: UnbalancedSet do
   def reduce(%UnbalancedSet{set: set}, {:cont, acc}, fun) do
     {:done,  reduce_(set, acc, fun)}
   end
-  def reduce(set, tagged_acc, fun), do: reduce(%UnbalancedSet{set: set}, tagged_acc, fun)
 
   defp reduce_(:empty, acc, _fun), do: acc
   defp reduce_({left, root, right}, acc, fun) do
