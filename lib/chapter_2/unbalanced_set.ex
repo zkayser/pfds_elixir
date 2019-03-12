@@ -147,10 +147,13 @@ defimpl Enumerable, for: UnbalancedSet do
 
   defp reduce_(:empty, acc, _fun), do: acc
   defp reduce_({left, root, right}, acc, fun) do
-    {:cont, intermediate} = fun.(acc, root)
-    {:cont, sum} = fun.(reduce_(left, acc, fun), reduce_(right, acc, fun))
-    {:cont, res} = fun.(intermediate, sum)
-    res
+    with {:cont, intermediate} <- fun.(acc, root) do
+      {:cont, sum} = fun.(reduce_(left, acc, fun), reduce_(right, acc, fun))
+      {:cont, res} = fun.(intermediate, sum)
+      res
+    else
+      {:halt, acc} -> acc
+    end
   end
 
   @impl true
