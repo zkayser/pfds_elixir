@@ -50,8 +50,18 @@ defmodule LeftistHeap do
   def get_min(:empty), do: {:error, :empty_heap}
   def get_min(%LeftistHeap{element: el}), do: {:ok, el}
 
+  @spec get_min!(t(any)) :: any | none()
+  def get_min!(%LeftistHeap{element: nil}), do: raise EmptyHeapError
+  def get_min!(:empty), do: raise EmptyHeapError
+  def get_min!(%LeftistHeap{element: min}), do: min
+
   @spec delete_min(t(any())) :: {:ok, t(any())} | {:error, :empty_heap}
   def delete_min(%LeftistHeap{element: nil}), do: {:error, :empty_heap}
   def delete_min(:empty), do: {:error, :empty_heap}
-  def delete_min(%LeftistHeap{left: left, right: right}), do: merge(left, right)
+  def delete_min(%LeftistHeap{left: left, right: right}), do: {:ok, merge(left, right)}
+
+  @spec delete_min!(t(any)) :: any | none()
+  def delete_min!(%LeftistHeap{element: nil}), do: raise EmptyHeapError
+  def delete_min!(:empty), do: raise EmptyHeapError
+  def delete_min!(%LeftistHeap{left: left, right: right}), do: merge(left, right)
 end

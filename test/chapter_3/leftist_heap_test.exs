@@ -59,4 +59,83 @@ defmodule LeftistHeapTest do
       assert LeftistHeap.merge(left_heap, right_heap) == expected
     end
   end
+
+  describe "get_min/1" do
+    test "retrieves the minimum element from the heap when the heap is not empty" do
+      assert {:ok, 1} = LeftistHeap.get_min(LeftistHeap.singleton(1))
+
+      assert {:ok, 5} =
+        LeftistHeap.singleton(5)
+        |> LeftistHeap.merge(LeftistHeap.singleton(10))
+        |> LeftistHeap.merge(LeftistHeap.singleton(20))
+        |> LeftistHeap.merge(LeftistHeap.singleton(15))
+        |> LeftistHeap.get_min()
+    end
+
+    test "returns an error tuple when the heap is empty" do
+      assert {:error, :empty_heap} = LeftistHeap.get_min(:empty)
+      assert {:error, :empty_heap} = LeftistHeap.get_min(%LeftistHeap{element: nil})
+    end
+  end
+
+  describe "get_min!/1" do
+    test "raises EmptyHeapError when the heap is empty" do
+      assert_raise EmptyHeapError, fn ->
+        LeftistHeap.get_min!(:empty)
+      end
+
+      assert_raise EmptyHeapError, fn ->
+        LeftistHeap.get_min!(%LeftistHeap{})
+      end
+    end
+  end
+
+  describe "delete_min/1" do
+    test "returns the left and the right branch of root when the heap is not empty" do
+      heap =
+        1
+        |> LeftistHeap.singleton()
+        |> LeftistHeap.merge(LeftistHeap.singleton(2))
+        |> LeftistHeap.merge(LeftistHeap.singleton(3))
+
+      expected_heap =
+        2
+        |> LeftistHeap.singleton()
+        |> LeftistHeap.merge(LeftistHeap.singleton(3))
+
+      assert {:ok, expected_heap} == LeftistHeap.delete_min(heap)
+    end
+
+    test "returns an error tuple when the heap is empty" do
+      assert {:error, :empty_heap} = LeftistHeap.delete_min(%LeftistHeap{})
+      assert {:error, :empty_heap} = LeftistHeap.delete_min(:empty)
+    end
+  end
+
+  describe "delete_min!/1" do
+    test "returns left and right branch of the root when the heap is not empty" do
+      heap =
+        1
+        |> LeftistHeap.singleton()
+        |> LeftistHeap.merge(LeftistHeap.singleton(2))
+        |> LeftistHeap.merge(LeftistHeap.singleton(3))
+
+      expected_heap =
+        2
+        |> LeftistHeap.singleton()
+        |> LeftistHeap.merge(LeftistHeap.singleton(3))
+
+      assert expected_heap == LeftistHeap.delete_min!(heap)
+    end
+
+    test "raises EmptyHeapError when the heap is empty" do
+      assert_raise EmptyHeapError, fn ->
+        LeftistHeap.delete_min!(%LeftistHeap{})
+      end
+
+      assert_raise EmptyHeapError, fn ->
+        LeftistHeap.delete_min!(:empty)
+      end
+    end
+  end
 end
