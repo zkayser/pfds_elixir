@@ -79,6 +79,19 @@ defmodule LeftistHeap do
     |> merge(leftist_heap)
   end
 
+  ################
+  # Exercise 3.2 #
+  ################
+  @spec insert_direct(any(), t(any)) :: t(any)
+  def insert_direct(val, :empty), do: LeftistHeap.singleton(val)
+  def insert_direct(val, %LeftistHeap{element: el, right: right, rank: rank} = heap) do
+    case val <= el do
+      true -> %LeftistHeap{element: val, left: heap}
+      false -> %LeftistHeap{heap | right: insert_direct(val, right), rank: rank + 1}
+    end
+  end
+
+
   @doc """
   Retrieves the minimum value from the LeftistHeap. Since
   the minimum value is always the root node, this operation
