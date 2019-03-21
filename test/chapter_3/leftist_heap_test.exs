@@ -3,15 +3,11 @@ defmodule LeftistHeapTest do
 
   describe "empty/0" do
     test "creates an empty leftist heap" do
-      assert %LeftistHeap{} == LeftistHeap.empty()
+      assert :empty == LeftistHeap.empty()
     end
   end
 
   describe "is_empty?/1" do
-    test "returns true for a leftist heap with no value" do
-      assert LeftistHeap.is_empty?(%LeftistHeap{})
-    end
-
     test "returns true for :empty" do
       assert LeftistHeap.is_empty?(:empty)
     end
@@ -31,12 +27,24 @@ defmodule LeftistHeapTest do
     test "returns non-empty leftist heap if one is empty" do
       assert LeftistHeap.merge(%LeftistHeap{element: 2}, :empty) == %LeftistHeap{element: 2}
       assert LeftistHeap.merge(:empty, %LeftistHeap{element: 1}) == %LeftistHeap{element: 1}
-      assert LeftistHeap.merge(LeftistHeap.empty(), %LeftistHeap{element: 3}) == %LeftistHeap{element: 3}
-      assert LeftistHeap.merge(%LeftistHeap{element: 4}, LeftistHeap.empty()) == %LeftistHeap{element: 4}
+
+      assert LeftistHeap.merge(LeftistHeap.empty(), %LeftistHeap{element: 3}) == %LeftistHeap{
+               element: 3
+             }
+
+      assert LeftistHeap.merge(%LeftistHeap{element: 4}, LeftistHeap.empty()) == %LeftistHeap{
+               element: 4
+             }
     end
 
     test "handles two singletons" do
-      expected = %LeftistHeap{element: 2, left: %LeftistHeap{element: 10, rank: 1}, rank: 1, right: :empty}
+      expected = %LeftistHeap{
+        element: 2,
+        left: %LeftistHeap{element: 10, rank: 1},
+        rank: 1,
+        right: :empty
+      }
+
       heap_1 = LeftistHeap.singleton(2)
       heap_2 = LeftistHeap.singleton(10)
       result = LeftistHeap.merge(heap_1, heap_2)
@@ -45,15 +53,25 @@ defmodule LeftistHeapTest do
     end
 
     test "handles leftist_heaps with more than one root" do
-      expected =
-        %LeftistHeap{
-          element: 2,
-          rank: 2,
-          right: LeftistHeap.singleton(10),
-          left: %LeftistHeap{element: 3, left: LeftistHeap.singleton(6), right: LeftistHeap.singleton(9), rank: 2}
+      expected = %LeftistHeap{
+        element: 2,
+        rank: 2,
+        right: LeftistHeap.singleton(10),
+        left: %LeftistHeap{
+          element: 3,
+          left: LeftistHeap.singleton(6),
+          right: LeftistHeap.singleton(9),
+          rank: 2
         }
+      }
 
-      left_heap = %LeftistHeap{element: 2, left: LeftistHeap.singleton(10), right: LeftistHeap.singleton(9), rank: 2}
+      left_heap = %LeftistHeap{
+        element: 2,
+        left: LeftistHeap.singleton(10),
+        right: LeftistHeap.singleton(9),
+        rank: 2
+      }
+
       right_heap = %LeftistHeap{element: 3, left: LeftistHeap.singleton(6)}
 
       assert LeftistHeap.merge(left_heap, right_heap) == expected
@@ -65,16 +83,15 @@ defmodule LeftistHeapTest do
       assert {:ok, 1} = LeftistHeap.get_min(LeftistHeap.singleton(1))
 
       assert {:ok, 5} =
-        LeftistHeap.singleton(5)
-        |> LeftistHeap.merge(LeftistHeap.singleton(10))
-        |> LeftistHeap.merge(LeftistHeap.singleton(20))
-        |> LeftistHeap.merge(LeftistHeap.singleton(15))
-        |> LeftistHeap.get_min()
+               LeftistHeap.singleton(5)
+               |> LeftistHeap.merge(LeftistHeap.singleton(10))
+               |> LeftistHeap.merge(LeftistHeap.singleton(20))
+               |> LeftistHeap.merge(LeftistHeap.singleton(15))
+               |> LeftistHeap.get_min()
     end
 
     test "returns an error tuple when the heap is empty" do
       assert {:error, :empty_heap} = LeftistHeap.get_min(:empty)
-      assert {:error, :empty_heap} = LeftistHeap.get_min(%LeftistHeap{element: nil})
     end
   end
 
@@ -82,10 +99,6 @@ defmodule LeftistHeapTest do
     test "raises EmptyHeapError when the heap is empty" do
       assert_raise EmptyHeapError, fn ->
         LeftistHeap.get_min!(:empty)
-      end
-
-      assert_raise EmptyHeapError, fn ->
-        LeftistHeap.get_min!(%LeftistHeap{})
       end
     end
   end
@@ -107,7 +120,6 @@ defmodule LeftistHeapTest do
     end
 
     test "returns an error tuple when the heap is empty" do
-      assert {:error, :empty_heap} = LeftistHeap.delete_min(%LeftistHeap{})
       assert {:error, :empty_heap} = LeftistHeap.delete_min(:empty)
     end
   end
@@ -129,10 +141,6 @@ defmodule LeftistHeapTest do
     end
 
     test "raises EmptyHeapError when the heap is empty" do
-      assert_raise EmptyHeapError, fn ->
-        LeftistHeap.delete_min!(%LeftistHeap{})
-      end
-
       assert_raise EmptyHeapError, fn ->
         LeftistHeap.delete_min!(:empty)
       end

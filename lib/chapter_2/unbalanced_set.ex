@@ -15,6 +15,7 @@ defmodule UnbalancedSet do
   Creates an UnbalancedSet from a list
   """
   def from_list([]), do: %__MODULE__{}
+
   def from_list(list) do
     list
     |> Enum.reduce(%__MODULE__{}, fn x, acc ->
@@ -68,6 +69,7 @@ defmodule UnbalancedSet do
   def insert(el, %__MODULE__{set: set}), do: %__MODULE__{set: insert_(el, set)}
 
   defp insert_(el, :empty), do: {:empty, el, :empty}
+
   defp insert_(el, {left, root, right} = tree) do
     cond do
       Ordered.lt(el, root) -> {insert_(el, left), root, right}
@@ -123,7 +125,9 @@ defmodule UnbalancedSet do
   d + 1 comparisons
   """
   @spec optimized_insert(Chapter2.el(), t()) :: t()
-  def optimized_insert(el, %__MODULE__{set: tree}), do: %__MODULE__{set: optimized_insert_(el, nil, tree)}
+  def optimized_insert(el, %__MODULE__{set: tree}),
+    do: %__MODULE__{set: optimized_insert_(el, nil, tree)}
+
   defp optimized_insert_(el, el, :empty), do: raise(ExistingElementException, el)
   defp optimized_insert_(el, _prev, :empty), do: {:empty, el, :empty}
 
@@ -141,11 +145,13 @@ defimpl Enumerable, for: UnbalancedSet do
   def reduce(_set, {:halt, acc}, _fun), do: {:halted, acc}
   def reduce(set, {:suspend, acc}, fun), do: {:suspended, acc, &reduce(set, &1, fun)}
   def reduce(%UnbalancedSet{set: :empty}, {:cont, acc}, _fun), do: {:done, acc}
+
   def reduce(%UnbalancedSet{set: set}, {:cont, acc}, fun) do
-    {:done,  reduce_(set, acc, fun)}
+    {:done, reduce_(set, acc, fun)}
   end
 
   defp reduce_(:empty, acc, _fun), do: acc
+
   defp reduce_({left, root, right}, acc, fun) do
     with {:cont, intermediate} <- fun.(acc, root) do
       {:cont, sum} = fun.(reduce_(left, acc, fun), reduce_(right, acc, fun))
