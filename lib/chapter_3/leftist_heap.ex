@@ -79,9 +79,13 @@ defmodule LeftistHeap do
     |> merge(leftist_heap)
   end
 
+  # -------------------------------------------------------------
+
   ################
   # Exercise 3.2 #
   ################
+
+  ## Problem: Define `insert` directly rather than via a call to merge
   @spec insert_direct(any(), t(any)) :: t(any)
   def insert_direct(val, :empty), do: LeftistHeap.singleton(val)
 
@@ -92,24 +96,36 @@ defmodule LeftistHeap do
     end
   end
 
+  # -------------------------------------------------------------
+
+  # -------------------------------------------------------------
   ################
   # Exercise 3.3 #
   ################
+
+  ## Problem: Implement a function `from_list` of type `Elem.t list -> Heap` that
+  ## produces a leftist heap from an unordered list of elements by first converting
+  ## each element into a singleton heap and then merging the heaps until only one
+  ## heap remains. Instead of merging the heaps in one right-to-left or left-to-right
+  ## pass using `foldr` or `foldl`, merge the heaps in |O(log n)| passes, where each
+  ## pass merges adjacent pairs of heaps. Show that `from_list` only takes O(n) time.
   @spec from_list(list(any)) :: t(any)
   def from_list([]), do: :empty
 
   def from_list(list) do
     list
     |> Enum.map(&LeftistHeap.singleton/1)
-    |> merge_pairs(LeftistHeap.empty())
+    |> merge_pairs()
   end
 
-  defp merge_pairs([], heap), do: heap
-  defp merge_pairs([first], heap), do: merge(first, heap)
+  defp merge_pairs([heap]), do: heap
 
-  defp merge_pairs([first, second | tail], heap) do
-    merge_pairs(tail, merge(first, second) |> merge(heap))
+  defp merge_pairs([first, second | tail]) do
+    [merge(first, second) | tail]
+    |> merge_pairs()
   end
+
+  # -------------------------------------------------------------
 
   @doc """
   Retrieves the minimum value from the LeftistHeap. Since

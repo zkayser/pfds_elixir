@@ -201,7 +201,7 @@ defmodule LeftistHeapTest do
     end
 
     test "returns a well-formed leftist heap from lists with multiple elements" do
-      heap = LeftistHeap.from_list([50, 15, 12, 24])
+      heap = LeftistHeap.from_list([50, 15, 12, 24, 75])
       assert %LeftistHeap{} = heap
       assert %LeftistHeap{} = heap.right
       assert %LeftistHeap{} = heap.left
