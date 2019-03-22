@@ -85,7 +85,13 @@ defmodule LeftistHeapTest do
 
     test "places the given element into the heap" do
       starting_heap = LeftistHeap.singleton(2) |> LeftistHeap.merge(LeftistHeap.singleton(3))
-      expected = %LeftistHeap{element: 1, left: %LeftistHeap{element: 2, left: %LeftistHeap{element: 3}}, right: :empty, rank: 1}
+
+      expected = %LeftistHeap{
+        element: 1,
+        left: %LeftistHeap{element: 2, left: %LeftistHeap{element: 3}},
+        right: :empty,
+        rank: 1
+      }
 
       starting_heap_2 = LeftistHeap.singleton(10)
       expected_2 = %LeftistHeap{element: 2, left: starting_heap_2}
@@ -100,7 +106,13 @@ defmodule LeftistHeapTest do
       assert LeftistHeap.singleton(1) == LeftistHeap.insert(1, :empty)
 
       starting_heap_1 = LeftistHeap.singleton(2) |> LeftistHeap.merge(LeftistHeap.singleton(3))
-      expected_1 = %LeftistHeap{element: 1, left: %LeftistHeap{element: 2, left: %LeftistHeap{element: 3}}, right: :empty, rank: 1}
+
+      expected_1 = %LeftistHeap{
+        element: 1,
+        left: %LeftistHeap{element: 2, left: %LeftistHeap{element: 3}},
+        right: :empty,
+        rank: 1
+      }
 
       starting_heap_2 = LeftistHeap.singleton(10)
       expected_2 = %LeftistHeap{element: 2, left: starting_heap_2}

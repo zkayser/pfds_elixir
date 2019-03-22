@@ -84,6 +84,7 @@ defmodule LeftistHeap do
   ################
   @spec insert_direct(any(), t(any)) :: t(any)
   def insert_direct(val, :empty), do: LeftistHeap.singleton(val)
+
   def insert_direct(val, %LeftistHeap{element: el, right: right, rank: rank} = heap) do
     case val <= el do
       true -> %LeftistHeap{element: val, left: heap}
@@ -96,18 +97,19 @@ defmodule LeftistHeap do
   ################
   @spec from_list(list(any)) :: t(any)
   def from_list([]), do: :empty
+
   def from_list(list) do
     list
     |> Enum.map(&LeftistHeap.singleton/1)
-    |> merge_pairs(LeftistHeap.empty)
+    |> merge_pairs(LeftistHeap.empty())
   end
 
   defp merge_pairs([], heap), do: heap
   defp merge_pairs([first], heap), do: merge(first, heap)
-  defp merge_pairs([first, second|tail], heap) do
-    merge_pairs(tail, first |> merge(second) |> merge(heap))
-  end
 
+  defp merge_pairs([first, second | tail], heap) do
+    merge_pairs(tail, merge(first, second) |> merge(heap))
+  end
 
   @doc """
   Retrieves the minimum value from the LeftistHeap. Since
