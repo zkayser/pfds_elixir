@@ -73,8 +73,10 @@ defmodule LeftistHeapTest do
       }
 
       right_heap = %LeftistHeap{element: 3, left: LeftistHeap.singleton(6)}
+      result = LeftistHeap.merge(left_heap, right_heap)
 
-      assert LeftistHeap.merge(left_heap, right_heap) == expected
+      assert result == expected
+      assert result.rank == 2
     end
   end
 
