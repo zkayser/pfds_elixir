@@ -183,5 +183,9 @@ defmodule LeftistHeapTest do
     test "returns an empty heap when given an empty list" do
       assert LeftistHeap.empty() == LeftistHeap.from_list([])
     end
+
+    test "returns a singleton heap when given a list with a singleton element" do
+      assert LeftistHeap.singleton(1) == LeftistHeap.from_list([1])
+    end
   end
 end
