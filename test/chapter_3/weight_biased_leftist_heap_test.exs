@@ -32,12 +32,50 @@ defmodule WeightBiasedLeftistHeapTest do
     end
 
     test "returns an empty heap when given two empty heaps" do
-      assert WBLeftistHeap.empty == WBLeftistHeap.merge(WBLeftistHeap.empty(), WBLeftistHeap.empty())
+      assert WBLeftistHeap.empty() ==
+               WBLeftistHeap.merge(WBLeftistHeap.empty(), WBLeftistHeap.empty())
     end
 
     test "returns a single merged heap when given two singleton heaps" do
       expected = %WBLeftistHeap{element: 1, left: %WBLeftistHeap{element: 2}, rank: 2}
-      assert expected == WBLeftistHeap.singleton(1) |> WBLeftistHeap.merge(WBLeftistHeap.singleton(2))
+
+      assert expected ==
+               WBLeftistHeap.singleton(1) |> WBLeftistHeap.merge(WBLeftistHeap.singleton(2))
+    end
+
+    test "returns a single merged heap from two larger heaps" do
+      heap_1 = WBLeftistHeap.singleton(25)
+      heap_2 = WBLeftistHeap.singleton(100)
+      heap_3 = WBLeftistHeap.singleton(75)
+      heap_4 = WBLeftistHeap.singleton(50)
+      heap_5 = WBLeftistHeap.singleton(125)
+
+      expected = %WeightBiasedLeftistHeap{
+        element: 25,
+        left: %WeightBiasedLeftistHeap{
+          element: 50,
+          left: %WeightBiasedLeftistHeap{element: 75, left: :empty, rank: 1, right: :empty},
+          rank: 2,
+          right: :empty
+        },
+        rank: 5,
+        right: %WeightBiasedLeftistHeap{
+          element: 100,
+          left: %WeightBiasedLeftistHeap{element: 125, left: :empty, rank: 1, right: :empty},
+          rank: 2,
+          right: :empty
+        }
+      }
+
+      result =
+        heap_1
+        |> WBLeftistHeap.merge(heap_2)
+        |> WBLeftistHeap.merge(heap_3)
+        |> WBLeftistHeap.merge(heap_4)
+        |> WBLeftistHeap.merge(heap_5)
+
+      assert result == expected
+      assert result.rank == 5
     end
   end
 end

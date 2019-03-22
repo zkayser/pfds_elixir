@@ -1,5 +1,6 @@
 defmodule WeightBiasedLeftistHeap do
   alias __MODULE__, as: WBLeftistHeap
+
   @moduledoc """
 
   ################
@@ -32,11 +33,13 @@ defmodule WeightBiasedLeftistHeap do
             left: :empty,
             right: :empty
 
-  @type t(a) :: :empty | %WBLeftistHeap{
-    rank: pos_integer(),
-    left: t(a),
-    right: t(a)
-  }
+  @type t(a) ::
+          :empty
+          | %WBLeftistHeap{
+              rank: pos_integer(),
+              left: t(a),
+              right: t(a)
+            }
 
   @spec empty() :: t(any)
   def empty(), do: :empty
@@ -52,9 +55,11 @@ defmodule WeightBiasedLeftistHeap do
   def merge(:empty, %WBLeftistHeap{} = heap), do: heap
   def merge(%WBLeftistHeap{} = heap, :empty), do: heap
   def merge(:empty, :empty), do: empty()
+
   def merge(%WBLeftistHeap{element: x} = h1, %WBLeftistHeap{element: y} = h2) when x > y do
     merge(h2, h1)
   end
+
   def merge(%WBLeftistHeap{right: right, left: left} = h1, %WBLeftistHeap{} = h2) do
     merged = merge(right, h2)
     {rank_left, rank_right} = {rank(left), rank(merged)}
