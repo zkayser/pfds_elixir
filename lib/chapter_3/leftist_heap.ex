@@ -91,6 +91,30 @@ defmodule LeftistHeap do
     end
   end
 
+  ################
+  # Exercise 3.3 #
+  ################
+  @spec from_list(list(any)) :: t(any)
+  def from_list([]), do: :empty
+  def from_list([first|tail]) do
+    tail
+    |> from_list_([LeftistHeap.singleton(first)])
+    |> merge_pairs(LeftistHeap.empty)
+  end
+
+  defp from_list_([], acc), do: acc
+  defp from_list_([first|tail], acc) do
+    from_list_(tail, [LeftistHeap.singleton(first)|acc])
+  end
+
+  defp merge_pairs([first], heap), do: merge(first, heap)
+  defp merge_pairs([first, second|tail], heap) do
+    first
+    |> merge(second)
+    |> merge(heap)
+    merge_pairs(tail, first |> merge(second) |> merge(heap))
+  end
+
 
   @doc """
   Retrieves the minimum value from the LeftistHeap. Since

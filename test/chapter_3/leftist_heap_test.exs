@@ -178,4 +178,10 @@ defmodule LeftistHeapTest do
       end
     end
   end
+
+  describe "from_list/1" do
+    test "returns an empty heap when given an empty list" do
+      assert LeftistHeap.empty() == LeftistHeap.from_list([])
+    end
+  end
 end
