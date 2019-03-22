@@ -96,22 +96,15 @@ defmodule LeftistHeap do
   ################
   @spec from_list(list(any)) :: t(any)
   def from_list([]), do: :empty
-  def from_list([first|tail]) do
-    tail
-    |> from_list_([LeftistHeap.singleton(first)])
+  def from_list(list) do
+    list
+    |> Enum.map(&LeftistHeap.singleton/1)
     |> merge_pairs(LeftistHeap.empty)
   end
 
-  defp from_list_([], acc), do: acc
-  defp from_list_([first|tail], acc) do
-    from_list_(tail, [LeftistHeap.singleton(first)|acc])
-  end
-
+  defp merge_pairs([], heap), do: heap
   defp merge_pairs([first], heap), do: merge(first, heap)
   defp merge_pairs([first, second|tail], heap) do
-    first
-    |> merge(second)
-    |> merge(heap)
     merge_pairs(tail, first |> merge(second) |> merge(heap))
   end
 

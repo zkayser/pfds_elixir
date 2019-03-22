@@ -187,5 +187,13 @@ defmodule LeftistHeapTest do
     test "returns a singleton heap when given a list with a singleton element" do
       assert LeftistHeap.singleton(1) == LeftistHeap.from_list([1])
     end
+
+    test "returns a well-formed leftist heap from lists with multiple elements" do
+      heap = LeftistHeap.from_list([50, 15, 12, 24])
+      assert %LeftistHeap{} = heap
+      assert %LeftistHeap{} = heap.right
+      assert %LeftistHeap{} = heap.left
+      assert heap.rank == 2
+    end
   end
 end
