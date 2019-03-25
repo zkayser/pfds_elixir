@@ -61,12 +61,9 @@ defmodule WeightBiasedLeftistHeap do
   end
 
   def merge(%WBLeftistHeap{right: right, left: left} = h1, %WBLeftistHeap{} = h2) do
-    merged = merge(right, h2)
-    {rank_left, rank_right} = {rank(left), rank(merged)}
-
-    case rank_left >= rank_right do
-      true -> %WBLeftistHeap{h1 | right: merged, rank: h1.rank + 1}
-      false -> %WBLeftistHeap{h1 | left: merged, right: left, rank: h1.rank + 1}
+    case rank(left) >= rank(right) + rank(h2) do
+      true -> %WBLeftistHeap{h1 | right: merge(right, h2), rank: rank(h1) + rank(h2)}
+      false -> %WBLeftistHeap{h1 | left: merge(right, h2), right: left, rank: rank(h1) + rank(h2)}
     end
   end
 
