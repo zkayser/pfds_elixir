@@ -87,6 +87,28 @@ defmodule BinomialHeap do
   end
 
   @doc """
+  #-------------------------------------------------------
+  ################
+  # Exercise 3.5 #
+  ################
+
+  Problem Description: Define `find_min` directly rather
+  than via a call to `remove_min_tree`.
+  #-------------------------------------------------------
+  """
+  def find_min_direct([]), do: {:error, :empty_heap}
+  def find_min_direct([%{element: el}]), do: el
+  def find_min_direct(heap) do
+    heap
+    |> Enum.reduce(hd(heap.element), fn tree, acc ->
+      case tree.element > acc do
+        true -> tree.element
+        false -> acc
+      end
+    end)
+  end
+
+  @doc """
   Deletes the minimum element from the heap.
 
   #------------------------------------------

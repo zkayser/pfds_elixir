@@ -117,4 +117,23 @@ defmodule BinomialHeapTest do
       assert {:error, :empty_heap} = BinomialHeap.delete_min([])
     end
   end
+
+  describe "find_min_direct/1" do
+    test "behaves the same as find_min/1" do
+      heap = BinomialHeap.insert([], 100)
+        |> BinomialHeap.insert(20)
+        |> BinomialHeap.insert(10)
+        |> BinomialHeap.insert(50)
+
+      assert BinomialHeap.find_min_direct(heap) == BinomialHeap.find_min(heap)
+    end
+
+    test "returns an error tuple when given an empty heap" do
+      assert {:error, :empty_heap} = BinomialHeap.find_min_direct([])
+    end
+
+    test "returns the only element on one-element, one-tree heaps" do
+      assert 1 == BinomialHeap.insert([], 1) |> BinomialHeap.find_min_direct()
+    end
+  end
 end
