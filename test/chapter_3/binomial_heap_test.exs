@@ -88,6 +88,10 @@ defmodule BinomialHeapTest do
 
       assert BinomialHeap.find_min(heap) == 10
     end
+
+    test "returns error tuple when given an empty heap" do
+      assert {:error, :empty_heap} = BinomialHeap.find_min([])
+    end
   end
 
   describe "delete_min/1" do
@@ -107,6 +111,10 @@ defmodule BinomialHeapTest do
 
       assert result == expected
       refute hd(result).element == 10
+    end
+
+    test "returns error tuple when given an empty heap" do
+      assert {:error, :empty_heap} = BinomialHeap.delete_min([])
     end
   end
 end

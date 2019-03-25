@@ -79,8 +79,11 @@ defmodule BinomialHeap do
   Returns the minimum value in the heap
   """
   def find_min(heap) do
-    {min, _} = remove_min_tree(heap)
-    min.element
+    with {:ok, {min, _}} <- remove_min_tree(heap) do
+      min.element
+    else
+      error -> error
+    end
   end
 
   @doc """
@@ -101,18 +104,22 @@ defmodule BinomialHeap do
   """
   @spec delete_min(heap(any)) :: heap(any)
   def delete_min(heap) do
-    {%{children: children}, remaining} = remove_min_tree(heap)
-    merge(Enum.reverse(children), remaining)
+    with {:ok, {%{children: children}, remaining}} <- remove_min_tree(heap) do
+      merge(Enum.reverse(children), remaining)
+    else
+      error -> error
+    end
   end
 
-  defp remove_min_tree([tree]), do: {tree, []}
+  defp remove_min_tree([]), do: {:error, :empty_heap}
+  defp remove_min_tree([tree]), do: {:ok, {tree, []}}
 
   defp remove_min_tree([head | tail]) do
-    {min_element, min_tree} = remove_min_tree(tail)
+    {:ok, {min_element, min_tree}} = remove_min_tree(tail)
 
     case head.element > min_element.element do
-      true -> {min_element, [head | min_tree]}
-      false -> {head, tail}
+      true -> {:ok, {min_element, [head | min_tree]}}
+      false -> {:ok, {head, tail}}
     end
   end
 end
