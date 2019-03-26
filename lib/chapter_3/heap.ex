@@ -5,6 +5,7 @@ defmodule Heap do
             | BinomialHeap.heap(a)
             | RanklessBinomialHeap.heap(a)
 
+  @callback empty() :: heap(any)
   @callback insert(any, heap(any)) :: heap(any)
   @callback merge(heap(any), heap(any)) :: heap(any)
   @callback find_min(heap(any)) :: {:ok, any} | {:error, :empty_heap}

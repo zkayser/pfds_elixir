@@ -25,6 +25,7 @@ defmodule LeftistHeap do
   @doc """
   Returns an empty LeftistHeap
   """
+  @impl true
   @spec empty() :: t(any())
   def empty(), do: :empty
 

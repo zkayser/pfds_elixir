@@ -20,6 +20,13 @@ defmodule BinomialHeap do
   @type heap(a) :: list(tree(a))
 
   @doc """
+  Returns an empty binomial heap.
+  """
+  @impl true
+  @spec empty() :: heap(any)
+  def empty(), do: []
+
+  @doc """
   Link maintains heap order by always linking trees with larger roots
   under trees with smaller roots.
   """

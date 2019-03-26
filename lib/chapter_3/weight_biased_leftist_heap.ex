@@ -42,6 +42,7 @@ defmodule WeightBiasedLeftistHeap do
               right: t(a)
             }
 
+  @impl true
   @spec empty() :: t(any)
   def empty(), do: :empty
 
