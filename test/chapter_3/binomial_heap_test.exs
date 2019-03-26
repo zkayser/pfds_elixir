@@ -86,7 +86,7 @@ defmodule BinomialHeapTest do
         |> BinomialHeap.insert(10)
         |> BinomialHeap.insert(50)
 
-      assert BinomialHeap.find_min(heap) == 10
+      assert {:ok, 10} == BinomialHeap.find_min(heap)
     end
 
     test "returns error tuple when given an empty heap" do
@@ -134,7 +134,7 @@ defmodule BinomialHeapTest do
     end
 
     test "returns the only element on one-element, one-tree heaps" do
-      assert 1 == BinomialHeap.insert([], 1) |> BinomialHeap.find_min_direct()
+      assert {:ok, 1} == BinomialHeap.insert([], 1) |> BinomialHeap.find_min_direct()
     end
   end
 end

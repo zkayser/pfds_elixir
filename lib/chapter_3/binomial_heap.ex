@@ -50,7 +50,10 @@ defmodule BinomialHeap do
   """
   @impl true
   @spec insert(any, heap(any)) :: heap(any)
-  def insert(heap, value), do: insert_(%{rank: 0, element: value, children: []}, heap)
+  def insert(value, heap) when is_list(heap),
+    do: insert_(%{rank: 0, element: value, children: []}, heap)
+
+  def insert(value, heap), do: insert(heap, value)
   defp insert_(t, []), do: [t]
 
   defp insert_(%{rank: rank} = t, [%{rank: rank_2} | _] = trees) when rank < rank_2 do
@@ -91,7 +94,7 @@ defmodule BinomialHeap do
   @impl true
   def find_min(heap) do
     with {:ok, {min, _}} <- remove_min_tree(heap) do
-      min.element
+      {:ok, min.element}
     else
       error -> error
     end
@@ -108,16 +111,17 @@ defmodule BinomialHeap do
   #-------------------------------------------------------
   """
   def find_min_direct([]), do: {:error, :empty_heap}
-  def find_min_direct([%{element: el}]), do: el
+  def find_min_direct([%{element: el}]), do: {:ok, el}
 
   def find_min_direct(heap) do
-    heap
-    |> Enum.reduce(hd(heap.element), fn tree, acc ->
-      case tree.element > acc do
-        true -> tree.element
-        false -> acc
-      end
-    end)
+    {:ok,
+     heap
+     |> Enum.reduce(hd(heap.element), fn tree, acc ->
+       case tree.element > acc do
+         true -> tree.element
+         false -> acc
+       end
+     end)}
   end
 
   @doc """

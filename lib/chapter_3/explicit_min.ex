@@ -1,4 +1,5 @@
-defprotocol ExplicitMin do
+defmodule ExplicitMin do
+  @behaviour Heap
   @moduledoc """
   #-------------------------------------------------------
   ################
@@ -27,18 +28,78 @@ defprotocol ExplicitMin do
   for the underlying implementation, `H`).
   #-------------------------------------------------------
   """
-  @typep implementation :: LeftistHeap | WeightBiasedLeftistHeap | BinomialHeap | RanklessBinomialHeap
+  @valid_heap_impls [LeftistHeap, WeightBiasedLeftistHeap, BinomialHeap, RanklessBinomialHeap]
+  @typep implementation ::
+           LeftistHeap | WeightBiasedLeftistHeap | BinomialHeap | RanklessBinomialHeap
   @type explicit_min(a) :: %{minimum: a | :empty, heap: Heap.heap(a), impl: implementation}
 
+  @doc """
+  Inits a new explicit min heap with a specific implementation
+  """
+  @spec init(implementation) :: explicit_min(any)
+  def init(implementation) when implementation in @valid_heap_impls do
+    %{minimum: :empty, heap: implementation.empty(), impl: implementation}
+  end
+
+  def init(invalid) do
+    raise %ArgumentError{
+      message: """
+      Cannot call ExplicitMin.init with implementation #{inspect(invalid)}.\n
+      Please use one of the valid heap implementations: #{
+        inspect(@valid_heap_impls, pretty: true)
+      }
+      """
+    }
+  end
+
+  @impl true
+  @spec empty() :: explicit_min(any)
+  def empty(), do: init(LeftistHeap)
+
+  @impl true
   @spec insert(any, explicit_min(any)) :: explicit_min(any)
-  def insert(val, heap)
+  def insert(val, %{minimum: min, heap: heap, impl: impl} = explicit_min)
+      when val < min or min == :empty do
+    %{explicit_min | minimum: val, heap: impl.insert(val, heap)}
+  end
 
+  def insert(val, %{heap: heap, impl: impl} = explicit_min) do
+    %{explicit_min | heap: impl.insert(val, heap)}
+  end
+
+  @impl true
   @spec merge(explicit_min(any), explicit_min(any)) :: explicit_min(any)
-  def merge(heap_1, heap_2)
+  def merge(%{minimum: :empty}, explicit_min), do: explicit_min
+  def merge(explicit_min, %{minimum: :empty}), do: explicit_min
 
+  def merge(
+        %{minimum: min_1, heap: heap_1, impl: impl} = em_1,
+        %{minimum: min_2, heap: heap_2} = em_2
+      ) do
+    case min_1 < min_2 do
+      true -> %{em_1 | heap: impl.merge(heap_1, heap_2)}
+      false -> %{em_2 | heap: impl.merge(heap_1, heap_2)}
+    end
+  end
+
+  @impl true
   @spec find_min(explicit_min(any)) :: {:ok, any} | {:error, :empty_heap}
-  def find_min(heap)
+  def find_min(%{minimum: :empty}), do: {:error, :empty_heap}
+  def find_min(%{minimum: min}), do: {:ok, min}
 
+  @impl true
   @spec delete_min(explicit_min(any)) :: {:ok, explicit_min(any)} | {:error, :empty_heap}
-  def delete_min(heap)
+  def delete_min(%{minimum: :empty}), do: {:error, :empty_heap}
+
+  def delete_min(%{heap: heap, impl: impl} = explicit_min) do
+    with {:ok, new_heap} <- impl.delete_min(heap),
+         {:ok, new_min} <- impl.find_min(new_heap) do
+      {:ok, %{explicit_min | minimum: new_min, heap: new_heap}}
+    else
+      error ->
+        IO.puts("You got an error: #{inspect(error, pretty: true)}")
+        IO.puts("Your impl is: #{impl}")
+        error
+    end
+  end
 end
