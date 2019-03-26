@@ -1,5 +1,6 @@
 defmodule WeightBiasedLeftistHeap do
   alias __MODULE__, as: WBLeftistHeap
+  @behaviour Heap
 
   @moduledoc """
 
@@ -51,6 +52,7 @@ defmodule WeightBiasedLeftistHeap do
   @spec singleton(any) :: t(any)
   def singleton(val), do: %WBLeftistHeap{element: val}
 
+  @impl true
   @spec merge(t(any), t(any)) :: t(any)
   def merge(:empty, %WBLeftistHeap{} = heap), do: heap
   def merge(%WBLeftistHeap{} = heap, :empty), do: heap
@@ -65,6 +67,24 @@ defmodule WeightBiasedLeftistHeap do
       true -> %WBLeftistHeap{h1 | right: merge(right, h2), rank: rank(h1) + rank(h2)}
       false -> %WBLeftistHeap{h1 | left: merge(right, h2), right: left, rank: rank(h1) + rank(h2)}
     end
+  end
+
+  @impl true
+  @spec find_min(t(any)) :: {:ok, any} | {:error, :empty_heap}
+  def find_min(%WBLeftistHeap{element: x}), do: {:ok, x}
+  def find_min(:empty), do: {:error, :empty_heap}
+
+  @impl true
+  @spec delete_min(t(any)) :: {:ok, t(any)} | {:error, :empty_heap}
+  def delete_min(%WBLeftistHeap{right: right, left: left}), do: {:ok, merge(left, right)}
+  def delete_min(:empty), do: {:error, :empty_heap}
+
+  @impl true
+  @spec insert(any, t(any)) :: t(any)
+  def insert(val, heap) do
+    val
+    |> singleton()
+    |> merge(heap)
   end
 
   defp rank(:empty), do: 0
