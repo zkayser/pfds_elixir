@@ -124,27 +124,27 @@ defmodule LeftistHeapTest do
     end
   end
 
-  describe "get_min/1" do
+  describe "find_min/1" do
     test "retrieves the minimum element from the heap when the heap is not empty" do
-      assert {:ok, 1} = LeftistHeap.get_min(LeftistHeap.singleton(1))
+      assert {:ok, 1} = LeftistHeap.find_min(LeftistHeap.singleton(1))
 
       assert {:ok, 5} =
                LeftistHeap.singleton(5)
                |> LeftistHeap.merge(LeftistHeap.singleton(10))
                |> LeftistHeap.merge(LeftistHeap.singleton(20))
                |> LeftistHeap.merge(LeftistHeap.singleton(15))
-               |> LeftistHeap.get_min()
+               |> LeftistHeap.find_min()
     end
 
     test "returns an error tuple when the heap is empty" do
-      assert {:error, :empty_heap} = LeftistHeap.get_min(:empty)
+      assert {:error, :empty_heap} = LeftistHeap.find_min(:empty)
     end
   end
 
-  describe "get_min!/1" do
+  describe "find_min!/1" do
     test "raises EmptyHeapError when the heap is empty" do
       assert_raise EmptyHeapError, fn ->
-        LeftistHeap.get_min!(:empty)
+        LeftistHeap.find_min!(:empty)
       end
     end
   end

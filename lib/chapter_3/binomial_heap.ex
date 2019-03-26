@@ -98,6 +98,7 @@ defmodule BinomialHeap do
   """
   def find_min_direct([]), do: {:error, :empty_heap}
   def find_min_direct([%{element: el}]), do: el
+
   def find_min_direct(heap) do
     heap
     |> Enum.reduce(hd(heap.element), fn tree, acc ->

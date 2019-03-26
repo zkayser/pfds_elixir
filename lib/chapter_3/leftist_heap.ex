@@ -1,4 +1,5 @@
 defmodule LeftistHeap do
+  @behaviour Heap
   @moduledoc """
   A Leftist Heap is a heap-ordered binary tree that satisfies the leftist property --
   the rank of any left child is at least as large as the rank of its right sibling.
@@ -51,6 +52,7 @@ defmodule LeftistHeap do
   @doc """
   Merges two LeftistHeaps into a single LeftistHeap.
   """
+  @impl true
   @spec merge(t(any()), t(any())) :: t(any())
   def merge(:empty, leftist_heap), do: leftist_heap
   def merge(leftist_heap, :empty), do: leftist_heap
@@ -72,6 +74,7 @@ defmodule LeftistHeap do
   @doc """
   Inserts a single value into a LeftistHeap.
   """
+  @impl true
   @spec insert(any(), t(any())) :: t(any())
   def insert(val, leftist_heap) do
     val
@@ -132,22 +135,24 @@ defmodule LeftistHeap do
   the minimum value is always the root node, this operation
   runs in O(1) time.
   """
-  @spec get_min(t(any())) :: {:ok, any()} | {:error, :empty_heap}
-  def get_min(:empty), do: {:error, :empty_heap}
-  def get_min(%LeftistHeap{element: el}), do: {:ok, el}
+  @impl true
+  @spec find_min(t(any())) :: {:ok, any()} | {:error, :empty_heap}
+  def find_min(:empty), do: {:error, :empty_heap}
+  def find_min(%LeftistHeap{element: el}), do: {:ok, el}
 
   @doc """
-  Same as `get_min/1`, but raises an EmptyHeapError if it
+  Same as `find_min/1`, but raises an EmptyHeapError if it
   tries to operate on an empty heap.
   """
-  @spec get_min!(t(any)) :: any | none()
-  def get_min!(:empty), do: raise(EmptyHeapError)
-  def get_min!(%LeftistHeap{element: min}), do: min
+  @spec find_min!(t(any)) :: any | none()
+  def find_min!(:empty), do: raise(EmptyHeapError)
+  def find_min!(%LeftistHeap{element: min}), do: min
 
   @doc """
   Deletes the minimum element from the heap and merges the
   root node's left and right children.
   """
+  @impl true
   @spec delete_min(t(any())) :: {:ok, t(any())} | {:error, :empty_heap}
   def delete_min(:empty), do: {:error, :empty_heap}
   def delete_min(%LeftistHeap{left: left, right: right}), do: {:ok, merge(left, right)}

@@ -49,9 +49,9 @@ defmodule RanklessBinomialHeap do
   def insert(heap, value), do: insert_(%{element: value, children: []}, heap)
   defp insert_(t, []), do: [t]
 
-  defp insert_(node, [node_2|remainder] = trees) do
+  defp insert_(node, [node_2 | remainder] = trees) do
     case rank(node) < rank(node_2) do
-      true -> [node|trees]
+      true -> [node | trees]
       false -> node |> link(node_2) |> insert_(remainder)
     end
   end
@@ -68,9 +68,10 @@ defmodule RanklessBinomialHeap do
   def merge([%{rank: rank} | _] = heap_1, [%{rank: rank_2} = t2 | smaller]) when rank_2 < rank do
     [t2 | merge(heap_1, smaller)]
   end
-  def merge([node_1|remainder_1] = heap_1, [node_2|remainder_2]) do
+
+  def merge([node_1 | remainder_1] = heap_1, [node_2 | remainder_2]) do
     case rank(node_2) < rank(node_1) do
-      true -> [node_2| merge(heap_1, remainder_2)]
+      true -> [node_2 | merge(heap_1, remainder_2)]
       false -> node_1 |> link(node_2) |> insert_(merge(remainder_1, remainder_2))
     end
   end
@@ -98,6 +99,7 @@ defmodule RanklessBinomialHeap do
   """
   def find_min_direct([]), do: {:error, :empty_heap}
   def find_min_direct([%{element: el}]), do: el
+
   def find_min_direct(heap) do
     heap
     |> Enum.reduce(hd(heap.element), fn tree, acc ->

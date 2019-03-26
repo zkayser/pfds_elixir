@@ -120,7 +120,8 @@ defmodule BinomialHeapTest do
 
   describe "find_min_direct/1" do
     test "behaves the same as find_min/1" do
-      heap = BinomialHeap.insert([], 100)
+      heap =
+        BinomialHeap.insert([], 100)
         |> BinomialHeap.insert(20)
         |> BinomialHeap.insert(10)
         |> BinomialHeap.insert(50)

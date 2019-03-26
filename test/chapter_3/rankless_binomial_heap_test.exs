@@ -64,7 +64,7 @@ defmodule RanklessBinomialHeapTest do
             %{children: [%{children: [], element: 50}], element: 10},
             %{children: [], element: 25}
           ],
-          element: 0,
+          element: 0
         }
       ]
 
@@ -114,7 +114,8 @@ defmodule RanklessBinomialHeapTest do
 
   describe "find_min_direct/1" do
     test "behaves the same as find_min/1" do
-      heap = RanklessBinomialHeap.insert([], 100)
+      heap =
+        RanklessBinomialHeap.insert([], 100)
         |> RanklessBinomialHeap.insert(20)
         |> RanklessBinomialHeap.insert(10)
         |> RanklessBinomialHeap.insert(50)
