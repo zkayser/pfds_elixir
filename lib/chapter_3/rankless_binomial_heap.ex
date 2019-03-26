@@ -1,4 +1,5 @@
 defmodule RanklessBinomialHeap do
+  @behaviour Heap
   @moduledoc """
   #-------------------------------------------------------
   ################
@@ -45,6 +46,7 @@ defmodule RanklessBinomialHeap do
   k links and O(k) = O(log n) time.
   #------------------------------------------
   """
+  @impl true
   @spec insert(any, heap(any)) :: heap(any)
   def insert(heap, value), do: insert_(%{element: value, children: []}, heap)
   defp insert_(t, []), do: [t]
@@ -61,6 +63,7 @@ defmodule RanklessBinomialHeap do
   @doc """
   Merges two heaps together.
   """
+  @impl true
   @spec merge(heap(any), heap(any)) :: heap(any)
   def merge(heap, []), do: heap
   def merge([], heap), do: heap
@@ -79,9 +82,11 @@ defmodule RanklessBinomialHeap do
   @doc """
   Returns the minimum value in the heap
   """
+  @impl true
+  @spec find_min(heap(any)) :: {:ok, any} | {:error, :empty_heap}
   def find_min(heap) do
     with {:ok, {min, _}} <- remove_min_tree(heap) do
-      min.element
+      {:ok, min.element}
     else
       error -> error
     end
@@ -98,16 +103,17 @@ defmodule RanklessBinomialHeap do
   #-------------------------------------------------------
   """
   def find_min_direct([]), do: {:error, :empty_heap}
-  def find_min_direct([%{element: el}]), do: el
+  def find_min_direct([%{element: el}]), do: {:ok, el}
 
   def find_min_direct(heap) do
-    heap
-    |> Enum.reduce(hd(heap.element), fn tree, acc ->
-      case tree.element > acc do
-        true -> tree.element
-        false -> acc
-      end
-    end)
+    {:ok,
+     heap
+     |> Enum.reduce(hd(heap.element), fn tree, acc ->
+       case tree.element > acc do
+         true -> tree.element
+         false -> acc
+       end
+     end)}
   end
 
   @doc """
@@ -126,7 +132,8 @@ defmodule RanklessBinomialHeap do
   then merging it with the remaining trees.
   #------------------------------------------
   """
-  @spec delete_min(heap(any)) :: heap(any)
+  @impl true
+  @spec delete_min(heap(any)) :: {:ok, heap(any)} | {:error, :empty_heap}
   def delete_min(heap) do
     with {:ok, {%{children: children}, remaining}} <- remove_min_tree(heap) do
       merge(Enum.reverse(children), remaining)

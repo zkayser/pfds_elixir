@@ -1,5 +1,9 @@
 defmodule Heap do
-  @opaque heap(a) :: LeftistHeap.t(a) | WeightBiasedLeftistHeap.t(a) | BinomialHeap.heap(a)
+  @opaque heap(a) ::
+            LeftistHeap.t(a)
+            | WeightBiasedLeftistHeap.t(a)
+            | BinomialHeap.heap(a)
+            | RanklessBinomialHeap.heap(a)
 
   @callback insert(any, heap(any)) :: heap(any)
   @callback merge(heap(any), heap(any)) :: heap(any)

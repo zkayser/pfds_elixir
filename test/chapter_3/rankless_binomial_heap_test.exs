@@ -80,7 +80,7 @@ defmodule RanklessBinomialHeapTest do
         |> RanklessBinomialHeap.insert(10)
         |> RanklessBinomialHeap.insert(50)
 
-      assert RanklessBinomialHeap.find_min(heap) == 10
+      assert RanklessBinomialHeap.find_min(heap) == {:ok, 10}
     end
 
     test "returns error tuple when given an empty heap" do
@@ -128,7 +128,8 @@ defmodule RanklessBinomialHeapTest do
     end
 
     test "returns the only element on one-element, one-tree heaps" do
-      assert 1 == RanklessBinomialHeap.insert([], 1) |> RanklessBinomialHeap.find_min_direct()
+      assert {:ok, 1} ==
+               RanklessBinomialHeap.insert([], 1) |> RanklessBinomialHeap.find_min_direct()
     end
   end
 end
