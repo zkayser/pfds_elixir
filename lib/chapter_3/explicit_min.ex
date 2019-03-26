@@ -57,14 +57,14 @@ defmodule ExplicitMin do
   def empty(), do: init(LeftistHeap)
 
   @impl true
-  @spec insert(any, explicit_min(any)) :: explicit_min(any)
-  def insert(val, %{minimum: min, heap: heap, impl: impl} = explicit_min)
+  @spec insert(explicit_min(any), any) :: explicit_min(any)
+  def insert(%{minimum: min, heap: heap, impl: impl} = explicit_min, val)
       when val < min or min == :empty do
-    %{explicit_min | minimum: val, heap: impl.insert(val, heap)}
+    %{explicit_min | minimum: val, heap: impl.insert(heap, val)}
   end
 
-  def insert(val, %{heap: heap, impl: impl} = explicit_min) do
-    %{explicit_min | heap: impl.insert(val, heap)}
+  def insert(%{heap: heap, impl: impl} = explicit_min, val) do
+    %{explicit_min | heap: impl.insert(heap, val)}
   end
 
   @impl true

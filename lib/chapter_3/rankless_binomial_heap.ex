@@ -54,8 +54,8 @@ defmodule RanklessBinomialHeap do
   #------------------------------------------
   """
   @impl true
-  @spec insert(any, heap(any)) :: heap(any)
-  def insert(heap, value), do: insert_(%{element: value, children: []}, heap)
+  @spec insert(heap(any), any) :: heap(any)
+  def insert(heap, val), do: insert_(%{element: val, children: []}, heap)
   defp insert_(t, []), do: [t]
 
   defp insert_(node, [node_2 | remainder] = trees) do

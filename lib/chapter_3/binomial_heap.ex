@@ -49,11 +49,9 @@ defmodule BinomialHeap do
   #------------------------------------------
   """
   @impl true
-  @spec insert(any, heap(any)) :: heap(any)
-  def insert(value, heap) when is_list(heap),
-    do: insert_(%{rank: 0, element: value, children: []}, heap)
+  @spec insert(heap(any), any) :: heap(any)
+  def insert(heap, value), do: insert_(%{rank: 0, element: value, children: []}, heap)
 
-  def insert(value, heap), do: insert(heap, value)
   defp insert_(t, []), do: [t]
 
   defp insert_(%{rank: rank} = t, [%{rank: rank_2} | _] = trees) when rank < rank_2 do
