@@ -101,12 +101,12 @@ defmodule WeightBiasedLeftistHeapTest do
 
   describe "insert/2" do
     test "inserts a single element into an empty heap" do
-      assert %WBLeftistHeap{element: 1} == WBLeftistHeap.insert(1, :empty)
+      assert %WBLeftistHeap{element: 1} == WBLeftistHeap.insert(:empty, 1)
     end
 
     test "inserts a single element into non-empty heaps" do
       assert %WBLeftistHeap{element: 1, left: %WBLeftistHeap{element: 2}, rank: 2} ==
-               WBLeftistHeap.insert(2, %WBLeftistHeap{element: 1})
+               WBLeftistHeap.insert(%WBLeftistHeap{element: 1}, 2)
     end
   end
 

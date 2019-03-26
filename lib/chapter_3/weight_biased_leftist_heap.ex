@@ -81,8 +81,10 @@ defmodule WeightBiasedLeftistHeap do
   def delete_min(:empty), do: {:error, :empty_heap}
 
   @impl true
-  @spec insert(any, t(any)) :: t(any)
-  def insert(val, heap) do
+  @spec insert(t(any), any) :: t(any)
+  def insert(:empty, val), do: singleton(val)
+
+  def insert(%WBLeftistHeap{} = heap, val) do
     val
     |> singleton()
     |> merge(heap)
