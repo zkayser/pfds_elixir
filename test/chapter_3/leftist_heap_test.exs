@@ -82,7 +82,7 @@ defmodule LeftistHeapTest do
 
   describe "insert/2" do
     test "behaves the same as singleton/1 when the heap is empty" do
-      assert LeftistHeap.singleton(1) == LeftistHeap.insert(1, :empty)
+      assert LeftistHeap.singleton(1) == LeftistHeap.insert(:empty, 1)
     end
 
     test "places the given element into the heap" do
@@ -98,14 +98,14 @@ defmodule LeftistHeapTest do
       starting_heap_2 = LeftistHeap.singleton(10)
       expected_2 = %LeftistHeap{element: 2, left: starting_heap_2}
 
-      assert LeftistHeap.insert(1, starting_heap) == expected
-      assert LeftistHeap.insert(2, starting_heap_2) == expected_2
+      assert LeftistHeap.insert(starting_heap, 1) == expected
+      assert LeftistHeap.insert(starting_heap_2, 2) == expected_2
     end
   end
 
   describe "insert_direct/2" do
     test "behaves the same as insert/2" do
-      assert LeftistHeap.singleton(1) == LeftistHeap.insert(1, :empty)
+      assert LeftistHeap.singleton(1) == LeftistHeap.insert(:empty, 1)
 
       starting_heap_1 = LeftistHeap.singleton(2) |> LeftistHeap.merge(LeftistHeap.singleton(3))
 

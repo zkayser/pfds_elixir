@@ -77,7 +77,9 @@ defmodule LeftistHeap do
   """
   @impl true
   @spec insert(any(), t(any())) :: t(any())
-  def insert(val, leftist_heap) do
+  def insert(:empty, val), do: singleton(val)
+
+  def insert(%LeftistHeap{} = leftist_heap, val) do
     val
     |> singleton()
     |> merge(leftist_heap)
