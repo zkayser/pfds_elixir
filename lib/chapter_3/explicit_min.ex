@@ -96,10 +96,7 @@ defmodule ExplicitMin do
          {:ok, new_min} <- impl.find_min(new_heap) do
       {:ok, %{explicit_min | minimum: new_min, heap: new_heap}}
     else
-      error ->
-        IO.puts("You got an error: #{inspect(error, pretty: true)}")
-        IO.puts("Your impl is: #{impl}")
-        error
+      error -> error
     end
   end
 end
