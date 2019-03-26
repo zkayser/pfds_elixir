@@ -107,7 +107,7 @@ defmodule BinomialHeapTest do
         %{children: [%{children: [], element: 100, rank: 0}], element: 20, rank: 1}
       ]
 
-      result = BinomialHeap.delete_min(heap)
+      assert {:ok, result} = BinomialHeap.delete_min(heap)
 
       assert result == expected
       refute hd(result).element == 10

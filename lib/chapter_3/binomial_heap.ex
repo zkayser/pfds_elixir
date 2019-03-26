@@ -1,4 +1,5 @@
 defmodule BinomialHeap do
+  @behaviour Heap
   @moduledoc """
   A binomial heap is a collection of heap-ordered binomial trees in which
   no two trees have the same rank. This collection is represented as a list
@@ -40,6 +41,7 @@ defmodule BinomialHeap do
   k links and O(k) = O(log n) time.
   #------------------------------------------
   """
+  @impl true
   @spec insert(any, heap(any)) :: heap(any)
   def insert(heap, value), do: insert_(%{rank: 0, element: value, children: []}, heap)
   defp insert_(t, []), do: [t]
@@ -57,6 +59,7 @@ defmodule BinomialHeap do
   @doc """
   Merges two heaps together.
   """
+  @impl true
   @spec merge(heap(any), heap(any)) :: heap(any)
   def merge(heap, []), do: heap
   def merge([], heap), do: heap
@@ -78,6 +81,7 @@ defmodule BinomialHeap do
   @doc """
   Returns the minimum value in the heap
   """
+  @impl true
   def find_min(heap) do
     with {:ok, {min, _}} <- remove_min_tree(heap) do
       min.element
@@ -125,10 +129,11 @@ defmodule BinomialHeap do
   then merging it with the remaining trees.
   #------------------------------------------
   """
-  @spec delete_min(heap(any)) :: heap(any)
+  @impl true
+  @spec delete_min(heap(any)) :: {:ok, heap(any)} | {:error, :empty_heap}
   def delete_min(heap) do
     with {:ok, {%{children: children}, remaining}} <- remove_min_tree(heap) do
-      merge(Enum.reverse(children), remaining)
+      {:ok, merge(Enum.reverse(children), remaining)}
     else
       error -> error
     end
