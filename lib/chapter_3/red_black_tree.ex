@@ -92,117 +92,104 @@ defmodule RedBlackTree do
 
   defp insert_(%RedBlackTree{element: root} = tree, val) when val < root do
     %RedBlackTree{tree | left: insert_(tree.left, val)}
-    |> balance()
+    |> lbalance()
   end
 
   defp insert_(%RedBlackTree{element: root} = tree, val) when val > root do
     %RedBlackTree{tree | right: insert_(tree.right, val)}
-    |> balance()
+    |> rbalance()
   end
 
   defp insert_(tree, _), do: tree
 
-  defp balance(
-         %RedBlackTree{
-           color: :black,
-           left: %RedBlackTree{
-             color: :red,
-             left: %RedBlackTree{
-               color: :red,
-               element: x,
-               left: red_child_left,
-               right: red_child_right
-             },
-             element: y,
-             right: red_parent_right
-           },
-           element: root,
-           right: root_right
-         } = tree
-       ) do
+  #-------------------------------------------------------
+
+  #################
+  # Exercise 3.10 #
+  #################
+
+  # Problem Description: The `balance` function currently
+  # performs several unnecessary tests. For example, when
+  # the `insert_` function recurses on the left child,
+  # there is no need for balance to test for red-red
+  # violations involving the right child.
+  #
+  # (a) Split `balance` into two functions, `lbalance`
+  # and `rbalance`, that test for violations involving
+  # the left child and right child, respectively. Replace
+  # the calls to `balance` in `insert_` with calls to
+  # either `lbalance` or `rbalance`.
+  #
+  # (b) Extending the same logic one step further, one of
+  # the remaining tests on the grandchildren is also
+  # unnecessary. Rewrite `insert_` so that it never tests
+  # the color of nodes not on the search path.
+
+  #-------------------------------------------------------
+  defp lbalance(
+    %RedBlackTree{
+      color: :black,
+      left: %RedBlackTree{
+        color: :red,
+        left: %RedBlackTree{
+          color: :red
+        } = red_child,
+    } = red_parent
+  } = tree) do
     tree
-    |> restructure_subtree(:left, red_child_left, x, red_child_right)
-    |> restructure_subtree(:right, red_parent_right, root, root_right)
-    |> replace_root(y)
+    |> restructure_subtree(:left, red_child.left, red_child.element, red_child.right)
+    |> restructure_subtree(:right, red_parent.right, tree.element, tree.right)
+    |> replace_root(red_parent.element)
     |> color_red()
   end
 
-  defp balance(
-         %RedBlackTree{
-           color: :black,
-           left: %RedBlackTree{
-             color: :red,
-             left: red_parent_left,
-             element: red_parent_el,
-             right: %RedBlackTree{
-               color: :red,
-               left: red_child_left,
-               element: red_child_el,
-               right: red_child_right
-             }
-           },
-           element: root,
-           right: root_right
-         } = tree
-       ) do
+  defp lbalance(%RedBlackTree{
+    color: :black,
+    left: %RedBlackTree{
+      color: :red,
+      right: %RedBlackTree{color: :red} = red_child
+    } = red_parent
+  } = tree) do
     tree
-    |> restructure_subtree(:left, red_parent_left, red_parent_el, red_child_left)
-    |> restructure_subtree(:right, red_child_right, root, root_right)
-    |> replace_root(red_child_el)
+    |> restructure_subtree(:left, red_parent.left, red_parent.el, red_child.left)
+    |> restructure_subtree(:right, red_child.right, tree.element, tree.right)
+    |> replace_root(red_child.element)
+    |> color_red()
+  end
+  defp lbalance(tree), do: tree
+
+  defp rbalance(%RedBlackTree{
+    color: :black,
+    right: %RedBlackTree{
+      color: :red,
+      left: %RedBlackTree{
+        color: :red
+      } = red_child
+    } = red_parent
+  } = tree) do
+    tree
+    |> restructure_subtree(:left, tree.left, tree.element, red_child.left)
+    |> restructure_subtree(:right, red_child.right, red_parent.element, red_parent.right)
+    |> replace_root(red_child.element)
     |> color_red()
   end
 
-  defp balance(
-         %RedBlackTree{
-           color: :black,
-           left: root_left,
-           element: root,
-           right: %RedBlackTree{
-             color: :red,
-             left: %RedBlackTree{
-               color: :red,
-               left: red_child_left,
-               element: red_child_el,
-               right: red_child_right
-             },
-             element: red_parent_el,
-             right: red_parent_right
-           }
-         } = tree
-       ) do
+  defp rbalance(%RedBlackTree{
+    color: :black,
+    right: %RedBlackTree{
+      color: :red,
+      right: %RedBlackTree{
+        color: :red
+      } = red_child
+    } = red_parent
+  } = tree) do
     tree
-    |> restructure_subtree(:left, root_left, root, red_child_left)
-    |> restructure_subtree(:right, red_child_right, red_parent_el, red_parent_right)
-    |> replace_root(red_child_el)
+    |> restructure_subtree(:left, tree.left, tree.element, red_parent.left)
+    |> restructure_subtree(:right, red_child.left, red_child.element, red_child.right)
+    |> replace_root(red_parent.element)
     |> color_red()
   end
-
-  defp balance(
-         %RedBlackTree{
-           color: :black,
-           left: root_left,
-           element: root,
-           right: %RedBlackTree{
-             color: :red,
-             left: red_parent_left,
-             element: red_parent_el,
-             right: %RedBlackTree{
-               color: :red,
-               left: red_child_left,
-               element: red_child_el,
-               right: red_child_right
-             }
-           }
-         } = tree
-       ) do
-    tree
-    |> restructure_subtree(:left, root_left, root, red_parent_left)
-    |> restructure_subtree(:right, red_child_left, red_child_el, red_child_right)
-    |> replace_root(red_parent_el)
-    |> color_red()
-  end
-
-  defp balance(tree), do: tree
+  defp rbalance(tree), do: tree
 
   defp restructure_subtree(%RedBlackTree{} = tree, :left, new_left, new_el, new_right) do
     %RedBlackTree{
