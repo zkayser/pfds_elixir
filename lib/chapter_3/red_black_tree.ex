@@ -58,6 +58,23 @@ defmodule RedBlackTree do
   def singleton(val), do: %RedBlackTree{element: val}
 
   @doc """
+  #-------------------------------------------------------
+
+  ################
+  # Exercise 3.9 #
+  ################
+
+  Problem Description: Write a function `from_ord_list` of
+  type `Elem list -> Tree` that converts a sorted list with
+  no duplicates into a red-black tree. Your function should
+  run in O(n) time.
+
+  #-------------------------------------------------------
+  """
+  @spec from_ord_list(list(any)) :: t(any)
+  def from_ord_list([]), do: empty()
+
+  @doc """
   Inserts a value into a red-black tree.
   """
   @spec insert(t(any), any) :: t(any)
