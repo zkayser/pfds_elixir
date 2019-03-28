@@ -102,7 +102,7 @@ defmodule RedBlackTree do
 
   defp insert_(tree, _), do: tree
 
-  #-------------------------------------------------------
+  # -------------------------------------------------------
 
   #################
   # Exercise 3.10 #
@@ -125,17 +125,20 @@ defmodule RedBlackTree do
   # unnecessary. Rewrite `insert_` so that it never tests
   # the color of nodes not on the search path.
 
-  #-------------------------------------------------------
+  # -------------------------------------------------------
   defp lbalance(
-    %RedBlackTree{
-      color: :black,
-      left: %RedBlackTree{
-        color: :red,
-        left: %RedBlackTree{
-          color: :red
-        } = red_child,
-    } = red_parent
-  } = tree) do
+         %RedBlackTree{
+           color: :black,
+           left:
+             %RedBlackTree{
+               color: :red,
+               left:
+                 %RedBlackTree{
+                   color: :red
+                 } = red_child
+             } = red_parent
+         } = tree
+       ) do
     tree
     |> restructure_subtree(:left, red_child.left, red_child.element, red_child.right)
     |> restructure_subtree(:right, red_parent.right, tree.element, tree.right)
@@ -143,30 +146,38 @@ defmodule RedBlackTree do
     |> color_red()
   end
 
-  defp lbalance(%RedBlackTree{
-    color: :black,
-    left: %RedBlackTree{
-      color: :red,
-      right: %RedBlackTree{color: :red} = red_child
-    } = red_parent
-  } = tree) do
+  defp lbalance(
+         %RedBlackTree{
+           color: :black,
+           left:
+             %RedBlackTree{
+               color: :red,
+               right: %RedBlackTree{color: :red} = red_child
+             } = red_parent
+         } = tree
+       ) do
     tree
     |> restructure_subtree(:left, red_parent.left, red_parent.el, red_child.left)
     |> restructure_subtree(:right, red_child.right, tree.element, tree.right)
     |> replace_root(red_child.element)
     |> color_red()
   end
+
   defp lbalance(tree), do: tree
 
-  defp rbalance(%RedBlackTree{
-    color: :black,
-    right: %RedBlackTree{
-      color: :red,
-      left: %RedBlackTree{
-        color: :red
-      } = red_child
-    } = red_parent
-  } = tree) do
+  defp rbalance(
+         %RedBlackTree{
+           color: :black,
+           right:
+             %RedBlackTree{
+               color: :red,
+               left:
+                 %RedBlackTree{
+                   color: :red
+                 } = red_child
+             } = red_parent
+         } = tree
+       ) do
     tree
     |> restructure_subtree(:left, tree.left, tree.element, red_child.left)
     |> restructure_subtree(:right, red_child.right, red_parent.element, red_parent.right)
@@ -174,21 +185,26 @@ defmodule RedBlackTree do
     |> color_red()
   end
 
-  defp rbalance(%RedBlackTree{
-    color: :black,
-    right: %RedBlackTree{
-      color: :red,
-      right: %RedBlackTree{
-        color: :red
-      } = red_child
-    } = red_parent
-  } = tree) do
+  defp rbalance(
+         %RedBlackTree{
+           color: :black,
+           right:
+             %RedBlackTree{
+               color: :red,
+               right:
+                 %RedBlackTree{
+                   color: :red
+                 } = red_child
+             } = red_parent
+         } = tree
+       ) do
     tree
     |> restructure_subtree(:left, tree.left, tree.element, red_parent.left)
     |> restructure_subtree(:right, red_child.left, red_child.element, red_child.right)
     |> replace_root(red_parent.element)
     |> color_red()
   end
+
   defp rbalance(tree), do: tree
 
   defp restructure_subtree(%RedBlackTree{} = tree, :left, new_left, new_el, new_right) do
