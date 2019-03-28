@@ -27,9 +27,16 @@ defmodule RedBlackTree do
   @typep color :: :red | :black
   @type t(a) :: %RedBlackTree{color: color, left: t(a), element: a, right: t(a)} | :empty
 
+  @doc """
+  Returns an empty red-black tree.
+  """
   @spec empty() :: t(any)
   def empty(), do: :empty
 
+  @doc """
+  Returns true if the value passed as the second parameter
+  is contained as an element in the red-black tree.
+  """
   @spec member?(t(any), any) :: boolean
   def member?(:empty, _), do: false
 
@@ -43,9 +50,16 @@ defmodule RedBlackTree do
 
   def member?(%RedBlackTree{}, _), do: true
 
+  @doc """
+  Returns an red-black tree with a single node
+  containing the value passed in.
+  """
   @spec singleton(any) :: t(any)
   def singleton(val), do: %RedBlackTree{element: val}
 
+  @doc """
+  Inserts a value into a red-black tree.
+  """
   @spec insert(t(any), any) :: t(any)
   def insert(tree, val) do
     balanced = insert_(tree, val)

@@ -79,4 +79,10 @@ defmodule RedBlackTreeTest do
       assert tree == expected
     end
   end
+
+  describe "from_ord_list/1" do
+    test "returns an empty red-black tree when given an empty list" do
+      assert RedBlackTree.empty() == RedBlackTree.from_ord_list([])
+    end
+  end
 end
