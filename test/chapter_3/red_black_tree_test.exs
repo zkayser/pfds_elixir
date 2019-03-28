@@ -84,5 +84,19 @@ defmodule RedBlackTreeTest do
     test "returns an empty red-black tree when given an empty list" do
       assert RedBlackTree.empty() == RedBlackTree.from_ord_list([])
     end
+
+    test "constructs a red-black tree from the given list" do
+      expected = %RedBlackTree{
+        color: :black,
+        element: 5,
+        left: %RedBlackTree{element: 1},
+        right: %RedBlackTree{
+          element: 10,
+          right: %RedBlackTree{color: :red, element: 15}
+        }
+      }
+
+      assert expected == RedBlackTree.from_ord_list([1, 5, 10, 15])
+    end
   end
 end

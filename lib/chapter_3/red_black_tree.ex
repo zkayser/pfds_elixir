@@ -73,6 +73,10 @@ defmodule RedBlackTree do
   """
   @spec from_ord_list(list(any)) :: t(any)
   def from_ord_list([]), do: empty()
+  def from_ord_list(list) do
+    list
+    |> Enum.reduce(RedBlackTree.empty(), fn el, rb_tree -> RedBlackTree.insert(rb_tree, el) end)
+  end
 
   @doc """
   Inserts a value into a red-black tree.
