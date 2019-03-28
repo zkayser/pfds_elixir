@@ -27,6 +27,9 @@ defmodule RedBlackTree do
   @typep color :: :red | :black
   @type t(a) :: %RedBlackTree{color: color, left: t(a), element: a, right: t(a)} | :empty
 
+  @spec empty() :: t(any)
+  def empty(), do: :empty
+
   @spec member?(t(any), any) :: boolean
   def member?(:empty, _), do: false
 

@@ -3,6 +3,12 @@ defmodule RedBlackTreeTest do
 
   @value "some value"
 
+  describe "empty/0" do
+    test "returns an empty red-black tree" do
+      assert RedBlackTree.empty() == :empty
+    end
+  end
+
   describe "member?/2" do
     test "returns false when given an empty tree" do
       refute RedBlackTree.member?(:empty, @value)
