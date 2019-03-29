@@ -38,17 +38,28 @@ defmodule RedBlackTree do
   is contained as an element in the red-black tree.
   """
   @spec member?(t(any), any) :: boolean
-  def member?(:empty, _), do: false
+  def member?(tree, el) do
+    case tree do
+      :empty ->
+        false
 
-  def member?(%RedBlackTree{left: left, element: root}, val) when val < root do
-    member?(left, val)
+      %RedBlackTree{left: left, element: root} when el < root ->
+        check_member?(el, left, :RBT_no_candidate)
+
+      %RedBlackTree{element: root, right: right} ->
+        check_member?(el, right, root)
+    end
   end
 
-  def member?(%RedBlackTree{element: root, right: right}, val) when val > root do
-    member?(right, val)
+  defp check_member?(el, :empty, candidate), do: el == candidate
+
+  defp check_member?(el, %RedBlackTree{left: left, element: root}, candidate) when el < root do
+    check_member?(el, left, candidate)
   end
 
-  def member?(%RedBlackTree{}, _), do: true
+  defp check_member?(el, %RedBlackTree{element: root, right: right}, _) do
+    check_member?(el, right, root)
+  end
 
   @doc """
   Returns an red-black tree with a single node
