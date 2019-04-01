@@ -99,4 +99,27 @@ defmodule RedBlackTreeTest do
       assert expected == RedBlackTree.from_ord_list([1, 5, 10, 15])
     end
   end
+
+  describe "depth/1" do
+    test "returns one for empty trees" do
+      assert RedBlackTree.depth(RedBlackTree.empty()) == 1
+    end
+
+    test "returns the depth of the tree" do
+      assert RedBlackTree.depth(RedBlackTree.singleton(1)) == 2
+
+      tree = RedBlackTree.singleton(2)
+        |> RedBlackTree.insert(3)
+        |> RedBlackTree.insert(4)
+
+      tree_2 = RedBlackTree.singleton(1)
+        |> RedBlackTree.insert(2)
+        |> RedBlackTree.insert(3)
+        |> RedBlackTree.insert(4)
+        |> RedBlackTree.insert(5)
+
+      assert RedBlackTree.depth(tree) == 3
+      assert RedBlackTree.depth(tree_2) == 4
+    end
+  end
 end

@@ -91,6 +91,14 @@ defmodule RedBlackTree do
   end
 
   @doc """
+  Returns the depth level of the red-black tree
+  """
+  def depth(:empty), do: 1
+  def depth(%RedBlackTree{left: left, right: right}) do
+    1 + max(depth(left), depth(right))
+  end
+
+  @doc """
   Inserts a value into a red-black tree.
   """
   @spec insert(t(any), any) :: t(any)
