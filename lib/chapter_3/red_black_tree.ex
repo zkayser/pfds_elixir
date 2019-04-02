@@ -176,7 +176,7 @@ defmodule RedBlackTree do
          } = tree
        ) do
     tree
-    |> restructure_subtree(:left, red_parent.left, red_parent.el, red_child.left)
+    |> restructure_subtree(:left, red_parent.left, red_parent.element, red_child.left)
     |> restructure_subtree(:right, red_child.right, tree.element, tree.right)
     |> replace_root(red_child.element)
     |> color_red()
