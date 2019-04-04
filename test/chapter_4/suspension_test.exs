@@ -16,6 +16,7 @@ defmodule SuspensionTest do
   describe "force/1" do
     test "calls the suspended function" do
       assert 5 == Suspension.suspend(5) |> Suspension.force()
+      assert 5 == Suspension.suspend({Kernel, :+, [2, 3]}) |> Suspension.force()
     end
   end
 end
