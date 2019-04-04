@@ -108,11 +108,13 @@ defmodule RedBlackTreeTest do
     test "returns the depth of the tree" do
       assert RedBlackTree.depth(RedBlackTree.singleton(1)) == 2
 
-      tree = RedBlackTree.singleton(2)
+      tree =
+        RedBlackTree.singleton(2)
         |> RedBlackTree.insert(3)
         |> RedBlackTree.insert(4)
 
-      tree_2 = RedBlackTree.singleton(1)
+      tree_2 =
+        RedBlackTree.singleton(1)
         |> RedBlackTree.insert(2)
         |> RedBlackTree.insert(3)
         |> RedBlackTree.insert(4)

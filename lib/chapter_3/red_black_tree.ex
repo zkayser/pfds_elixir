@@ -87,13 +87,19 @@ defmodule RedBlackTree do
 
   def from_ord_list(list) do
     list
-    |> Enum.reduce(RedBlackTree.empty(), fn el, rb_tree -> RedBlackTree.insert(rb_tree, el) end)
+    |> Enum.reduce(
+      RedBlackTree.empty(),
+      fn el, rb_tree ->
+        RedBlackTree.insert(rb_tree, el)
+      end
+    )
   end
 
   @doc """
   Returns the depth level of the red-black tree
   """
   def depth(:empty), do: 1
+
   def depth(%RedBlackTree{left: left, right: right}) do
     1 + max(depth(left), depth(right))
   end
