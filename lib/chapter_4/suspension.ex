@@ -1,5 +1,4 @@
 defmodule Suspension do
-
   @type t(a) :: %Suspension{fun: (() -> a)}
   @typep fun_expression :: {atom, atom, list(any)} | any
 
