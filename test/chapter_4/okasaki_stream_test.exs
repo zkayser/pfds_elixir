@@ -32,5 +32,35 @@ defmodule OkasakiStreamTest do
     test "returns an empty suspension when called with any n on an empty stream" do
       assert :empty == Stream.take(Suspension.create(:empty), 5) |> Suspension.force()
     end
+
+    test "returns a stream with n elements if the stream is larger than n" do
+      stream =
+        Suspension.create(%Cons{
+          head: 1,
+          tail:
+            Suspension.create(%Cons{
+              head: 2,
+              tail:
+                Suspension.create(%Cons{
+                  head: 3,
+                  tail: Suspension.create(:empty)
+                })
+            })
+        })
+
+      result = Stream.take(stream, 2)
+      assert %{head: head, tail: tail} = Suspension.force(result)
+      assert %{head: next, tail: last} = Suspension.force(tail)
+      assert :empty = Suspension.force(last)
+      assert head == 1
+      assert next == 2
+    end
+
+    test "returns a stream with up to n elements when n is larger than the stream" do
+      stream = Suspension.create(%Cons{head: 1, tail: Suspension.create(:empty)})
+      assert %{head: head, tail: last} = Stream.take(stream, 7) |> Suspension.force()
+      assert :empty = Suspension.force(last)
+      assert head == 1
+    end
   end
 end
