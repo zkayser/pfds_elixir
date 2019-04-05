@@ -7,6 +7,9 @@ defmodule OkasakiStream do
   @type cell(a) :: :empty | Cons.t(a)
   @type t(a) :: Suspension.t(cell(a))
 
+  @doc """
+  Appends two stream together.
+  """
   @spec append(t(any), t(any)) :: t(any)
   def append(stream_1, stream_2) do
     case Suspension.force(stream_1) do
@@ -18,6 +21,11 @@ defmodule OkasakiStream do
     end
   end
 
+  @doc """
+  Takes a stream and a non-negative integer and returns a stream
+  with `n` populated elements, or as many elements as are available
+  in the stream.
+  """
   @spec take(t(any), non_neg_integer) :: t(any)
   def take(_stream, 0), do: Suspension.create(:empty)
 
