@@ -28,5 +28,9 @@ defmodule OkasakiStreamTest do
     test "returns an empty suspension when take 0 is passed" do
       assert :empty == Stream.take(Suspension.create(1), 0) |> Suspension.force()
     end
+
+    test "returns an empty suspension when called with any n on an empty stream" do
+      assert :empty == Stream.take(Suspension.create(:empty), 5) |> Suspension.force()
+    end
   end
 end

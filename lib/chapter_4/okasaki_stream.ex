@@ -20,4 +20,12 @@ defmodule OkasakiStream do
 
   @spec take(t(any), non_neg_integer) :: t(any)
   def take(_stream, 0), do: Suspension.create(:empty)
+  def take(stream, n) do
+    case Suspension.force(stream) do
+      :empty ->
+        stream
+
+      _ -> stream
+    end
+  end
 end
