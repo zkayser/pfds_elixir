@@ -17,4 +17,7 @@ defmodule OkasakiStream do
         Suspension.create(%Cons{head: el, tail: append(tail, stream_2)})
     end
   end
+
+  @spec take(t(any), non_neg_integer) :: t(any)
+  def take(_stream, 0), do: Suspension.create(:empty)
 end
