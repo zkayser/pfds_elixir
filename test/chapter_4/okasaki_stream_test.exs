@@ -63,4 +63,35 @@ defmodule OkasakiStreamTest do
       assert head == 1
     end
   end
+
+  describe "drop/2" do
+    test "returns the stream as is when 0 is passed for _n_" do
+      stream = Suspension.create(%Cons{head: 1, tail: Suspension.create(:empty)})
+      assert stream == Stream.drop(stream, 0)
+    end
+
+    test "returns the stream as is when the stream is empty" do
+      stream = Suspension.create(:empty)
+      assert stream == Stream.drop(stream, 10)
+    end
+
+    test "returns the stream with the first _n_ elements dropped" do
+      stream =
+        Suspension.create(%Cons{
+          head: 1,
+          tail:
+            Suspension.create(%Cons{
+              head: 2,
+              tail:
+                Suspension.create(%Cons{
+                  head: 3,
+                  tail: Suspension.create(:empty)
+                })
+            })
+        })
+
+      expected = Suspension.create(%Cons{head: 3, tail: Suspension.create(:empty)})
+      assert expected == Stream.drop(stream, 2)
+    end
+  end
 end

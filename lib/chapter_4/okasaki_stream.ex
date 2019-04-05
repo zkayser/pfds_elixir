@@ -38,4 +38,20 @@ defmodule OkasakiStream do
         Suspension.create(%Cons{head: head, tail: take(tail, n - 1)})
     end
   end
+
+  @doc """
+  Drops the first n values of the stream.
+  """
+  @spec drop(t(any), non_neg_integer) :: t(any)
+  def drop(stream, 0), do: stream
+
+  def drop(stream, n) do
+    case Suspension.force(stream) do
+      :empty ->
+        stream
+
+      %Cons{tail: tail} ->
+        drop(tail, n - 1)
+    end
+  end
 end
