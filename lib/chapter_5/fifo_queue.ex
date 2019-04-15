@@ -23,4 +23,10 @@ defmodule FifoQueue do
   @spec tail(t(any)) :: {:ok, any} | {:error, :empty_queue}
   def tail({[_|tail], rear}), do: {:ok, {tail, rear}}
   def tail({[], _}), do: {:error, :empty_queue}
+
+  @doc """
+  Places an element onto the front of the rear list.
+  """
+  @spec snoc(t(any), any) :: t(any)
+  def snoc({front, rear}, element), do: {front, [element|rear]}
 end

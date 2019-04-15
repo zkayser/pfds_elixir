@@ -21,4 +21,10 @@ defmodule FifoQueueTest do
       assert {:error, :empty_queue} = Queue.tail({[], []})
     end
   end
+
+  describe "snoc/2" do
+    test "places an element onto the front of the rear list" do
+      assert {[1], [2]} = Queue.snoc({[1], []}, 2)
+    end
+  end
 end
