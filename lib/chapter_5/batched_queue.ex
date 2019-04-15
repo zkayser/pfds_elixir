@@ -39,8 +39,7 @@ defmodule BatchedQueue do
   also empty.
   """
   @spec tail(t(any)) :: {:ok, any} | {:error, :empty_queue}
-  def tail({[_], rear}), do: {:ok, {Enum.reverse(rear), []}}
-  def tail({[_|tail], rear}), do: {:ok, {tail, rear}}
+  def tail({[_|tail], rear}), do: {:ok, check_front({tail, rear})}
   def tail({[], _}), do: {:error, :empty_queue}
 
   @doc """
@@ -51,6 +50,10 @@ defmodule BatchedQueue do
   when `rear` is also empty.
   """
   @spec snoc(t(any), any) :: t(any)
-  def snoc({[], _}, element), do: {[element], []}
-  def snoc({front, rear}, element), do: {front, [element|rear]}
+  def snoc({front, rear}, element), do: {front, [element|rear]} |> check_front()
+
+  # Maintains the invariant that `front` only be empty when
+  # `rear` is also empty.
+  defp check_front({[], rear}), do: {Enum.reverse(rear), []}
+  defp check_front(queue), do: queue
 end
