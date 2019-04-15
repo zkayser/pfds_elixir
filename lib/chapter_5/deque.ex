@@ -26,4 +26,11 @@ defmodule Deque do
   """
   @spec empty() :: t(any)
   def empty(), do: {[], []}
+
+  @doc """
+  Returns true when the deque is empty
+  """
+  @spec empty?(t(any)) :: boolean
+  def empty?({[], _}), do: true
+  def empty?(_), do: false
 end
