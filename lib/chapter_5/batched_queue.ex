@@ -1,4 +1,4 @@
-defmodule FifoQueue do
+defmodule BatchedQueue do
   @moduledoc """
   This module provides an implementation for fifo queues
   using strict evaluation. The amortized running times of

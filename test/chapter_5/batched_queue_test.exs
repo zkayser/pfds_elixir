@@ -1,5 +1,5 @@
-defmodule FifoQueueTest do
-  alias FifoQueue, as: Queue
+defmodule BatchedQueueTest do
+  alias BatchedQueue, as: Queue
   use ExUnit.Case
 
   describe "head/1" do
