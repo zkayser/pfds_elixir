@@ -2,6 +2,22 @@ defmodule BatchedQueueTest do
   alias BatchedQueue, as: Queue
   use ExUnit.Case
 
+  describe "empty/0" do
+    test "returns an empty queue" do
+      assert Queue.empty == {[], []}
+    end
+  end
+
+  describe "empty?/1" do
+    test "returns true if the queue is empty" do
+      assert Queue.empty?(Queue.empty)
+    end
+
+    test "returns false when the queue is non-empty" do
+      refute Queue.empty?({[1], []})
+    end
+  end
+
   describe "head/1" do
     test "returns the first element when the queue is not empty" do
       assert {:ok, 1} = Queue.head({[1], []})

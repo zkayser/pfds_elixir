@@ -23,6 +23,19 @@ defmodule BatchedQueue do
   @type t(a) :: Queue.t(a)
 
   @doc """
+  Creates an empty queue.
+  """
+  @spec empty() :: t(any)
+  def empty(), do: {[], []}
+
+  @doc """
+  Returns true if the queue is empty
+  """
+  @spec empty?(t(any)) :: boolean
+  def empty?({[], _}), do: true
+  def empty?(_), do: false
+
+  @doc """
   Takes a queue and returns the first element wrapped in an
   ok tuple or returns an error tuple if the queue is empty.
   """
