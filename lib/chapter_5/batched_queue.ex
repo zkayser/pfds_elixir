@@ -4,6 +4,20 @@ defmodule BatchedQueue do
   using strict evaluation. The amortized running times of
   the operations are good provided that the data structure
   is not used persistently.
+
+  Elements get added to the queue on the rear list of a tuple
+  of lists: `{front, rear}`, and elements are removed from
+  the front list. The elements of the queue must therefore
+  migrate from one list to the other, which is accomplished
+  in this implementation by reversing the `rear` list and
+  setting the result of the reversal as the new `front`
+  whenever the `front` list would otherwise become empty,
+  while simultaneously setting the new `rear` list to be empty.
+
+  The goal is to maintain the invariant that `front` is empty
+  only when `rear` is also empty (i.e., the entire queue is empty).
+  By maintaining this invariant, we guarantee that `head` can always
+  find the first element in O(1) time.
   """
 
   @type t(a) :: Queue.t(a)
@@ -19,6 +33,10 @@ defmodule BatchedQueue do
   @doc """
   Removes the first element of the queue provided the queue
   is non-empty. Returns an error tuple otherwise.
+
+  `tail/1` must detect cases that would result in a violation
+  of the invariant that `front` is only empty when `rear` is
+  also empty.
   """
   @spec tail(t(any)) :: {:ok, any} | {:error, :empty_queue}
   def tail({[_|tail], rear}), do: {:ok, {tail, rear}}
@@ -26,7 +44,12 @@ defmodule BatchedQueue do
 
   @doc """
   Places an element onto the front of the rear list.
+
+  List `tail/1`, `snoc/2` must also detect any cases that would
+  result in a violation of the invariant that `front`is only empty
+  when `rear` is also empty.
   """
   @spec snoc(t(any), any) :: t(any)
+  def snoc({[], _}, element), do: {[element], []}
   def snoc({front, rear}, element), do: {front, [element|rear]}
 end

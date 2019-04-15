@@ -26,5 +26,9 @@ defmodule BatchedQueueTest do
     test "places an element onto the front of the rear list" do
       assert {[1], [2]} = Queue.snoc({[1], []}, 2)
     end
+
+    test "handles cases that would violate the batched queue invariant" do
+      assert {[1], []} = Queue.snoc({[], []}, 1)
+    end
   end
 end
