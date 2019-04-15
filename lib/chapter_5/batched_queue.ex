@@ -39,6 +39,7 @@ defmodule BatchedQueue do
   also empty.
   """
   @spec tail(t(any)) :: {:ok, any} | {:error, :empty_queue}
+  def tail({[_], rear}), do: {:ok, {Enum.reverse(rear), []}}
   def tail({[_|tail], rear}), do: {:ok, {tail, rear}}
   def tail({[], _}), do: {:error, :empty_queue}
 

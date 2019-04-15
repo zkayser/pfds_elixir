@@ -20,6 +20,10 @@ defmodule BatchedQueueTest do
     test "returns an error tuple when the queue is empty" do
       assert {:error, :empty_queue} = Queue.tail({[], []})
     end
+
+    test "detects violations of the batched queue invariant" do
+      assert {:ok, {[2, 3, 4], []}} = Queue.tail({[1], [4, 3, 2]})
+    end
   end
 
   describe "snoc/2" do
