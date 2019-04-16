@@ -35,7 +35,19 @@ defmodule DequeTest do
     end
 
     test "returns an error tuple when the deque is empty" do
-      assert {:error, :empty_queue} = Deque.head(Deque.empty())
+      assert {:error, :empty_queue} = Deque.head(Deque.empty)
+    end
+  end
+
+  describe "tail/1" do
+    test "removes the first element from the deque" do
+      assert Deque.tail({[1], []}) == {:ok, Deque.empty}
+      assert Deque.tail({[1], [2]}) == {:ok, {[2], []}}
+      assert Deque.tail({[1, 2], [3]}) == {:ok, {[2], [3]}}
+    end
+
+    test "returns an error tuple when the deque is empty" do
+      assert {:error, :empty_queue} = Deque.tail(Deque.empty)
     end
   end
 end
