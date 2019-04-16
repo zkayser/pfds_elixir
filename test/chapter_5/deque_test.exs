@@ -28,4 +28,14 @@ defmodule DequeTest do
              |> Deque.cons(2) == {[2], [1]}
     end
   end
+
+  describe "head/1" do
+    test "returns the first element in the deque when non-empty" do
+      assert {:ok, 1} = Deque.head({[1], []})
+    end
+
+    test "returns an error tuple when the deque is empty" do
+      assert {:error, :empty_queue} = Deque.head(Deque.empty())
+    end
+  end
 end

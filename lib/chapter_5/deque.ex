@@ -47,6 +47,14 @@ defmodule Deque do
     |> maintain_invariant()
   end
 
+  @doc """
+  Returns the first element in the deque if the deque is
+  non-empty; otherwise returns an error tuple
+  """
+  @spec head(t(any)) :: {:ok, any} | {:error, :empty_queue}
+  def head({[el | _], _}), do: {:ok, el}
+  def head({[], []}), do: {:error, :empty_queue}
+
   # Maintains the invariant that both the `front`
   # and `rear` lists must be non-empty whenever the
   # queue contains two or more elements. This function
