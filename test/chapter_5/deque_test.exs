@@ -74,4 +74,16 @@ defmodule DequeTest do
       assert {:error, :empty_queue} = Deque.last(Deque.empty())
     end
   end
+
+  describe "init/1" do
+    test "removes the last element of the deque" do
+      assert {:ok, {[1], []}} = Deque.init({[1], [2]})
+      assert {:ok, {[1], [2]}} = Deque.init({[1], [3, 2]})
+      assert {:ok, Deque.empty()} == Deque.init({[], [1]})
+    end
+
+    test "returns an error tuple when the deque is empty" do
+      assert {:error, :empty_queue} = Deque.init(Deque.empty())
+    end
+  end
 end

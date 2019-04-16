@@ -87,6 +87,15 @@ defmodule Deque do
   def last({[only_element], []}), do: {:ok, only_element}
   def last({[], []}), do: {:error, :empty_queue}
 
+  @doc """
+  Removes the last element of the deque if the deque
+  is non-empty; otherwise returns an error tuple
+  """
+  @spec init(t(any)) :: {:ok, t(any)} | {:error, :empty_queue}
+  def init({front, [_ | rear_tail]}), do: {:ok, maintain_invariant({front, rear_tail})}
+  def init({[_ | _] = front, []}), do: {:ok, maintain_invariant({front, []})}
+  def init({[], []}), do: {:error, :empty_queue}
+
   # Maintains the invariant that both the `front`
   # and `rear` lists must be non-empty whenever the
   # queue contains two or more elements. This function
