@@ -4,13 +4,13 @@ defmodule BatchedQueueTest do
 
   describe "empty/0" do
     test "returns an empty queue" do
-      assert Queue.empty == {[], []}
+      assert Queue.empty() == {[], []}
     end
   end
 
   describe "empty?/1" do
     test "returns true if the queue is empty" do
-      assert Queue.empty?(Queue.empty)
+      assert Queue.empty?(Queue.empty())
     end
 
     test "returns false when the queue is non-empty" do

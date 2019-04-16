@@ -40,7 +40,7 @@ defmodule BatchedQueue do
   ok tuple or returns an error tuple if the queue is empty.
   """
   @spec head(t(any)) :: {:ok, any} | {:error, :empty_queue}
-  def head({[head|_], _}), do: {:ok, head}
+  def head({[head | _], _}), do: {:ok, head}
   def head({[], _}), do: {:error, :empty_queue}
 
   @doc """
@@ -52,7 +52,7 @@ defmodule BatchedQueue do
   also empty.
   """
   @spec tail(t(any)) :: {:ok, any} | {:error, :empty_queue}
-  def tail({[_|tail], rear}), do: {:ok, check_front({tail, rear})}
+  def tail({[_ | tail], rear}), do: {:ok, check_front({tail, rear})}
   def tail({[], _}), do: {:error, :empty_queue}
 
   @doc """
@@ -63,7 +63,7 @@ defmodule BatchedQueue do
   when `rear` is also empty.
   """
   @spec snoc(t(any), any) :: t(any)
-  def snoc({front, rear}, element), do: {front, [element|rear]} |> check_front()
+  def snoc({front, rear}, element), do: {front, [element | rear]} |> check_front()
 
   # Maintains the invariant that `front` only be empty when
   # `rear` is also empty.

@@ -3,17 +3,29 @@ defmodule DequeTest do
 
   describe "empty/0" do
     test "creates an empty deque" do
-      assert Deque.empty == {[], []}
+      assert Deque.empty() == {[], []}
     end
   end
 
   describe "empty?/1" do
     test "returns true if the deque is empty" do
-      assert Deque.empty?(Deque.empty)
+      assert Deque.empty?(Deque.empty())
     end
 
     test "returns false when the deque is non-empty" do
       refute Deque.empty?({[1], []})
+    end
+  end
+
+  describe "cons/2" do
+    test "places an element on the front of the deque" do
+      assert Deque.cons(Deque.empty(), 1) == {[1], []}
+    end
+
+    test "maintains the deque invariant that both front and rear lists be non-empty with 2+ elements" do
+      assert Deque.empty()
+             |> Deque.cons(1)
+             |> Deque.cons(2) == {[2], [1]}
     end
   end
 end
