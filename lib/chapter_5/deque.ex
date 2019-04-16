@@ -18,7 +18,7 @@ defmodule Deque do
 
   #-------------------------------------------------------------
   """
-
+  @behaviour Queue
   @type t(a) :: Queue.t(a)
 
   @doc """
@@ -60,7 +60,7 @@ defmodule Deque do
   Removes the first element from the deque if the deque
   is non-empty; otherwise returns an error tuple
   """
-  @spec tail(t(any)) :: {:ok, any} | {:error, :empty_queue}
+  @spec tail(t(any)) :: {:ok, t(any)} | {:error, :empty_queue}
   def tail({[_ | front_tail], rear}), do: {:ok, maintain_invariant({front_tail, rear})}
   def tail({[], [_ | _] = rear}), do: {:ok, maintain_invariant({[], rear})}
   def tail({[], []}), do: {:error, :empty_queue}
