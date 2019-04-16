@@ -50,4 +50,16 @@ defmodule DequeTest do
       assert {:error, :empty_queue} = Deque.tail(Deque.empty)
     end
   end
+
+  describe "snoc/2" do
+    test "places an element at the back of the deque" do
+      assert Deque.snoc({[1], [2]}, 3) == {[1], [3, 2]}
+    end
+
+    test "maintains the invariant that both lists must be non-empty when there are 2+ elements in the deque" do
+      assert Deque.empty
+        |> Deque.snoc(1)
+        |> Deque.snoc(2) == {[1], [2]}
+    end
+  end
 end

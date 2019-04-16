@@ -64,6 +64,20 @@ defmodule Deque do
   def tail({[], [_|_] = rear}), do: {:ok, maintain_invariant({[], rear})}
   def tail({[], []}), do: {:error, :empty_queue}
 
+  @doc """
+  Places an element at the rear of the deque.
+
+  `snoc/2` must also maintain the invariant for
+  deques that both the `front` and `rear` lists
+  be non-empty when there are at least two elements
+  in the deque.
+  """
+  @spec snoc(t(any), any) :: t(any)
+  def snoc({front, rear}, el) do
+    {front, [el|rear]}
+    |> maintain_invariant()
+  end
+
   # Maintains the invariant that both the `front`
   # and `rear` lists must be non-empty whenever the
   # queue contains two or more elements. This function
