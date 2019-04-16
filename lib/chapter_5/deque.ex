@@ -68,7 +68,7 @@ defmodule Deque do
       front
       |> Enum.split(round(length(front) / 2))
 
-    {new_front, Enum.reverse(new_rear)}
+    {new_front, :lists.reverse(new_rear)}
   end
 
   defp maintain_invariant({[], rear}) do
@@ -76,6 +76,6 @@ defmodule Deque do
       rear
       |> Enum.split(floor(length(rear) / 2))
 
-    {Enum.reverse(new_front), new_rear}
+    {:lists.reverse(new_front), new_rear}
   end
 end
