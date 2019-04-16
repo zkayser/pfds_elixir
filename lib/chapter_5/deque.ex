@@ -53,6 +53,7 @@ defmodule Deque do
   """
   @spec head(t(any)) :: {:ok, any} | {:error, :empty_queue}
   def head({[el | _], _}), do: {:ok, el}
+  def head({[], [only_element]}), do: {:ok, only_element}
   def head({[], []}), do: {:error, :empty_queue}
 
   @doc """
@@ -60,8 +61,8 @@ defmodule Deque do
   is non-empty; otherwise returns an error tuple
   """
   @spec tail(t(any)) :: {:ok, any} | {:error, :empty_queue}
-  def tail({[_|front_tail], rear}), do: {:ok, maintain_invariant({front_tail, rear})}
-  def tail({[], [_|_] = rear}), do: {:ok, maintain_invariant({[], rear})}
+  def tail({[_ | front_tail], rear}), do: {:ok, maintain_invariant({front_tail, rear})}
+  def tail({[], [_ | _] = rear}), do: {:ok, maintain_invariant({[], rear})}
   def tail({[], []}), do: {:error, :empty_queue}
 
   @doc """
@@ -74,9 +75,17 @@ defmodule Deque do
   """
   @spec snoc(t(any), any) :: t(any)
   def snoc({front, rear}, el) do
-    {front, [el|rear]}
+    {front, [el | rear]}
     |> maintain_invariant()
   end
+
+  @doc """
+  Returns the last element of the deque.
+  """
+  @spec last(t(any)) :: {:ok, any} | {:error, :empty_queue}
+  def last({_, [last | _]}), do: {:ok, last}
+  def last({[only_element], []}), do: {:ok, only_element}
+  def last({[], []}), do: {:error, :empty_queue}
 
   # Maintains the invariant that both the `front`
   # and `rear` lists must be non-empty whenever the
@@ -101,5 +110,6 @@ defmodule Deque do
 
     {:lists.reverse(new_front), new_rear}
   end
+
   defp maintain_invariant(deque), do: deque
 end

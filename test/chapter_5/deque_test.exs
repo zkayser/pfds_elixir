@@ -32,22 +32,23 @@ defmodule DequeTest do
   describe "head/1" do
     test "returns the first element in the deque when non-empty" do
       assert {:ok, 1} = Deque.head({[1], []})
+      assert {:ok, 1} = Deque.head({[], [1]})
     end
 
     test "returns an error tuple when the deque is empty" do
-      assert {:error, :empty_queue} = Deque.head(Deque.empty)
+      assert {:error, :empty_queue} = Deque.head(Deque.empty())
     end
   end
 
   describe "tail/1" do
     test "removes the first element from the deque" do
-      assert Deque.tail({[1], []}) == {:ok, Deque.empty}
+      assert Deque.tail({[1], []}) == {:ok, Deque.empty()}
       assert Deque.tail({[1], [2]}) == {:ok, {[2], []}}
       assert Deque.tail({[1, 2], [3]}) == {:ok, {[2], [3]}}
     end
 
     test "returns an error tuple when the deque is empty" do
-      assert {:error, :empty_queue} = Deque.tail(Deque.empty)
+      assert {:error, :empty_queue} = Deque.tail(Deque.empty())
     end
   end
 
@@ -57,9 +58,20 @@ defmodule DequeTest do
     end
 
     test "maintains the invariant that both lists must be non-empty when there are 2+ elements in the deque" do
-      assert Deque.empty
-        |> Deque.snoc(1)
-        |> Deque.snoc(2) == {[1], [2]}
+      assert Deque.empty()
+             |> Deque.snoc(1)
+             |> Deque.snoc(2) == {[1], [2]}
+    end
+  end
+
+  describe "last/1" do
+    test "returns the last element in the deque when non-empty" do
+      assert {:ok, 2} = Deque.last({[1], [2]})
+      assert {:ok, 2} = Deque.last({[2], []})
+    end
+
+    test "returns an error tuple when the deque is empty" do
+      assert {:error, :empty_queue} = Deque.last(Deque.empty())
     end
   end
 end
