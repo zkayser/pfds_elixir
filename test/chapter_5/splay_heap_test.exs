@@ -34,4 +34,19 @@ defmodule SplayHeapTest do
       assert heap.el == 7
     end
   end
+
+  describe "find_min/1" do
+    test "returns the smallest element in the heap" do
+      heap =
+        SplayHeap.singleton(100)
+        |> SplayHeap.insert(10)
+        |> SplayHeap.insert(500)
+        |> SplayHeap.insert(1)
+        |> SplayHeap.insert(50)
+        |> SplayHeap.insert(1000)
+        |> SplayHeap.insert(200)
+
+      assert SplayHeap.find_min(heap) == 1
+    end
+  end
 end

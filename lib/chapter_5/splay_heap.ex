@@ -54,6 +54,14 @@ defmodule SplayHeap do
     }
   end
 
+  @doc """
+  Finds and returns the smallest element contained
+  in the heap.
+  """
+  @spec find_min(t(any)) :: any
+  def find_min(%SplayHeap{left: :empty, el: min}), do: min
+  def find_min(%SplayHeap{left: left}), do: find_min(left)
+
   defp partition(:empty, _), do: {:empty, :empty}
 
   defp partition(%SplayHeap{left: l, el: x, right: r} = heap, el) when x <= el do
