@@ -93,4 +93,10 @@ defmodule SplayHeapTest do
              }
     end
   end
+
+  describe "sort/1" do
+    test "takes a list of elements and dumps them out into a sorted list" do
+      assert SplayHeap.sort([5, 2, 7, 15, 4]) == [2, 4, 5, 7, 15]
+    end
+  end
 end

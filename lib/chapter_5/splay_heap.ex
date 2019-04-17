@@ -95,6 +95,26 @@ defmodule SplayHeap do
     %SplayHeap{left: merge(smaller, l), el: x, right: merge(bigger, r)}
   end
 
+  @doc """
+  Takes a collection of elements and dumps them into
+  a sorted list. This function should run in O(n) time
+  instead of O(n log n) time to sort an already sorted list.
+  """
+  @spec sort(list(any)) :: list(any)
+  def sort([]), do: []
+
+  def sort(list) do
+    heap = Enum.reduce(list, :empty, &insert(&2, &1))
+    traverse(heap, [])
+  end
+
+  defp traverse(:empty, acc), do: acc
+  defp traverse(%SplayHeap{left: :empty, el: x, right: :empty}, acc), do: [x | acc]
+
+  defp traverse(%SplayHeap{left: l, el: x, right: r}, acc) do
+    traverse(l, acc) ++ [x] ++ traverse(r, acc)
+  end
+
   defp partition(:empty, _), do: {:empty, :empty}
 
   defp partition(%SplayHeap{left: l, el: x, right: r} = heap, el) when x <= el do
