@@ -98,5 +98,14 @@ defmodule SplayHeapTest do
     test "takes a list of elements and dumps them out into a sorted list" do
       assert SplayHeap.sort([5, 2, 7, 15, 4]) == [2, 4, 5, 7, 15]
     end
+
+    test "takes a SplayHeap and dumps its elements out into a sorted list" do
+      heap =
+        SplayHeap.singleton(5)
+        |> SplayHeap.insert(1)
+        |> SplayHeap.insert(10)
+
+      assert SplayHeap.sort(heap) == [1, 5, 10]
+    end
   end
 end

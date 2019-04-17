@@ -100,13 +100,15 @@ defmodule SplayHeap do
   a sorted list. This function should run in O(n) time
   instead of O(n log n) time to sort an already sorted list.
   """
-  @spec sort(list(any)) :: list(any)
+  @spec sort(list(any) | t(any)) :: list(any)
   def sort([]), do: []
 
-  def sort(list) do
+  def sort(list) when is_list(list) do
     heap = Enum.reduce(list, :empty, &insert(&2, &1))
     traverse(heap, [])
   end
+
+  def sort(%SplayHeap{} = heap), do: traverse(heap, [])
 
   defp traverse(:empty, acc), do: acc
   defp traverse(%SplayHeap{left: :empty, el: x, right: :empty}, acc), do: [x | acc]
