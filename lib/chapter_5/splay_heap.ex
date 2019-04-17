@@ -68,11 +68,31 @@ defmodule SplayHeap do
   """
   @spec delete_min(t(any)) :: t(any)
   def delete_min(%SplayHeap{left: :empty, right: right}), do: right
-  def delete_min(%SplayHeap{left: %SplayHeap{left: :empty, right: min_sibling}, el: y, right: right}) do
+
+  def delete_min(%SplayHeap{
+        left: %SplayHeap{left: :empty, right: min_sibling},
+        el: y,
+        right: right
+      }) do
     %SplayHeap{left: min_sibling, el: y, right: right}
   end
+
   def delete_min(%SplayHeap{left: %SplayHeap{left: a, el: x, right: b}, el: y, right: right}) do
     %SplayHeap{left: delete_min(a), el: x, right: %SplayHeap{left: b, el: y, right: right}}
+  end
+
+  @doc """
+  Merges two heaps together. This operation is not efficient
+  on the SplayHeap data structure, taking up to O(n) time for
+  many inputs.
+  """
+  @spec merge(t(any), t(any)) :: t(any)
+  def merge(:empty, heap), do: heap
+  def merge(heap, :empty), do: heap
+
+  def merge(%SplayHeap{left: l, el: x, right: r}, heap) do
+    {smaller, bigger} = partition(heap, x)
+    %SplayHeap{left: merge(smaller, l), el: x, right: merge(bigger, r)}
   end
 
   defp partition(:empty, _), do: {:empty, :empty}
