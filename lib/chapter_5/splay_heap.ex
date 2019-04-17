@@ -62,6 +62,19 @@ defmodule SplayHeap do
   def find_min(%SplayHeap{left: :empty, el: min}), do: min
   def find_min(%SplayHeap{left: left}), do: find_min(left)
 
+  @doc """
+  Removes the minimum node from the heap and restructures the
+  heap at the same time to keep the heap balanced.
+  """
+  @spec delete_min(t(any)) :: t(any)
+  def delete_min(%SplayHeap{left: :empty, right: right}), do: right
+  def delete_min(%SplayHeap{left: %SplayHeap{left: :empty, right: min_sibling}, el: y, right: right}) do
+    %SplayHeap{left: min_sibling, el: y, right: right}
+  end
+  def delete_min(%SplayHeap{left: %SplayHeap{left: a, el: x, right: b}, el: y, right: right}) do
+    %SplayHeap{left: delete_min(a), el: x, right: %SplayHeap{left: b, el: y, right: right}}
+  end
+
   defp partition(:empty, _), do: {:empty, :empty}
 
   defp partition(%SplayHeap{left: l, el: x, right: r} = heap, el) when x <= el do

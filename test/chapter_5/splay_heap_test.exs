@@ -49,4 +49,19 @@ defmodule SplayHeapTest do
       assert SplayHeap.find_min(heap) == 1
     end
   end
+
+  describe "delete_min/1" do
+    test "removes the minimum node from the heap" do
+      heap =
+        SplayHeap.singleton(5)
+        |> SplayHeap.insert(1)
+        |> SplayHeap.insert(10)
+
+      assert SplayHeap.delete_min(heap) == %SplayHeap{
+        left: :empty,
+        el: 5,
+        right: %SplayHeap{el: 10}
+      }
+    end
+  end
 end
