@@ -33,4 +33,67 @@ defmodule SplayHeap do
   def singleton(el) do
     %SplayHeap{el: el}
   end
+
+  @doc """
+  Inserts an element into the heap. The element being
+  inserted should be placed at the root of the heap
+  with the rest of the heap being partitioned into
+  elements that are larger than the element being
+  inserted stored in the right heap and elements
+  smaller than the element being inserted stored in
+  the left heap.
+  """
+  @spec insert(t(any), any) :: t(any)
+  def insert(heap, el) do
+    {smaller, bigger} = partition(heap, el)
+
+    %SplayHeap{
+      left: smaller,
+      el: el,
+      right: bigger
+    }
+  end
+
+  defp partition(:empty, _), do: {:empty, :empty}
+
+  defp partition(%SplayHeap{left: l, el: x, right: r} = heap, el) when x <= el do
+    case r do
+      :empty ->
+        {heap, :empty}
+
+      %SplayHeap{el: y} = sub_heap when y <= el ->
+        {smaller, bigger} = partition(sub_heap.right, el)
+
+        {%SplayHeap{
+           left: %SplayHeap{left: l, el: x, right: sub_heap.left},
+           el: y,
+           right: smaller
+         }, bigger}
+
+      %SplayHeap{el: y} = sub_heap ->
+        {smaller, bigger} = partition(sub_heap.left, el)
+
+        {%SplayHeap{left: l, el: x, right: smaller},
+         %SplayHeap{left: bigger, el: y, right: sub_heap.right}}
+    end
+  end
+
+  defp partition(%SplayHeap{left: l, el: x, right: r} = heap, el) do
+    case l do
+      :empty ->
+        {:empty, heap}
+
+      %SplayHeap{el: y} = sub_heap when y <= el ->
+        {smaller, bigger} = partition(sub_heap.right, el)
+
+        {%SplayHeap{left: sub_heap.left, el: y, right: smaller},
+         %SplayHeap{left: bigger, el: x, right: r}}
+
+      %SplayHeap{el: y} = sub_heap ->
+        {smaller, bigger} = partition(sub_heap.left, el)
+
+        {smaller,
+         %SplayHeap{left: bigger, el: y, right: %SplayHeap{left: sub_heap.right, el: x, right: r}}}
+    end
+  end
 end
