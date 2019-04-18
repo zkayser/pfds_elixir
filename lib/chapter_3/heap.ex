@@ -4,6 +4,7 @@ defmodule Heap do
             | WeightBiasedLeftistHeap.t(a)
             | BinomialHeap.heap(a)
             | RanklessBinomialHeap.heap(a)
+            | PairingHeap.t(a)
             | ExplicitMin.explicit_min(a)
 
   @callback empty() :: heap(any)

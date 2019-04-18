@@ -22,6 +22,14 @@ defmodule PairingHeap do
 
   defstruct root: nil, children: []
   @type t(a) :: :empty | %PairingHeap{root: a, children: list(t(a))}
+  @behaviour Heap
+
+  @doc """
+  Returns an empty pairing heap.
+  """
+  @impl true
+  @spec empty() :: t(any)
+  def empty(), do: :empty
 
   @doc """
   Creates a pairing heap with a single element
@@ -33,6 +41,7 @@ defmodule PairingHeap do
   @doc """
   Finds and returns the minimum element in the heap.
   """
+  @impl true
   @spec find_min(t(any)) :: {:ok, any} | {:error, :empty_heap}
   def find_min(%PairingHeap{root: el}), do: {:ok, el}
   def find_min(:empty), do: {:error, :empty_heap}
@@ -40,6 +49,7 @@ defmodule PairingHeap do
   @doc """
   Merges two heaps together
   """
+  @impl true
   @spec merge(t(any), t(any)) :: t(any)
   def merge(:empty, heap), do: heap
   def merge(heap, :empty), do: heap
@@ -55,6 +65,7 @@ defmodule PairingHeap do
   @doc """
   Places the given element in the heap.
   """
+  @impl true
   @spec insert(t(any), any) :: t(any)
   def insert(heap, element) do
     element
@@ -68,6 +79,7 @@ defmodule PairingHeap do
   in pairs from left to right, and then merging the
   resulting trees from right to left.
   """
+  @impl true
   @spec delete_min(t(any)) :: {:ok, t(any)} | {:error, :empty_heap}
   def delete_min(:empty), do: {:error, :empty_heap}
   def delete_min(%PairingHeap{root: _, children: children}), do: {:ok, merge_pairs(children)}
