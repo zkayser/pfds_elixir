@@ -53,4 +53,15 @@ defmodule PairingHeapTest do
              ]
     end
   end
+
+  describe "delete_min/1" do
+    test "removes the minimum element from the heap" do
+      heap = PairingHeap.merge(PairingHeap.singleton(1), PairingHeap.singleton(2))
+      assert PairingHeap.delete_min(heap) == {:ok, PairingHeap.singleton(2)}
+    end
+
+    test "returns an error tuple when the heap is empty" do
+      assert {:error, :empty_heap} = PairingHeap.delete_min(:empty)
+    end
+  end
 end

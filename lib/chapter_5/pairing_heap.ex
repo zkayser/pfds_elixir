@@ -61,4 +61,22 @@ defmodule PairingHeap do
     |> PairingHeap.singleton()
     |> PairingHeap.merge(heap)
   end
+
+  @doc """
+  Removes the root of the heap and then merges the
+  children in two passes: one merging the children
+  in pairs from left to right, and then merging the
+  resulting trees from right to left.
+  """
+  @spec delete_min(t(any)) :: {:ok, t(any)} | {:error, :empty_heap}
+  def delete_min(:empty), do: {:error, :empty_heap}
+  def delete_min(%PairingHeap{root: _, children: children}), do: {:ok, merge_pairs(children)}
+
+  defp merge_pairs([]), do: :empty
+  defp merge_pairs([heap]), do: heap
+
+  defp merge_pairs([heap_1, heap_2 | tail]) do
+    merge(heap_1, heap_2)
+    |> merge(merge_pairs(tail))
+  end
 end
