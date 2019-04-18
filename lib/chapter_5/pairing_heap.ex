@@ -36,4 +36,17 @@ defmodule PairingHeap do
   @spec find_min(t(any)) :: {:ok, any} | {:error, :empty_heap}
   def find_min(%PairingHeap{root: el}), do: {:ok, el}
   def find_min(:empty), do: {:error, :empty_heap}
+
+  @doc """
+  Merges two heaps together
+  """
+  @spec merge(t(any), t(any)) :: t(any)
+  def merge(:empty, heap), do: heap
+  def merge(heap, :empty), do: heap
+  def merge(%PairingHeap{root: x} = h1, %PairingHeap{root: y} = h2) when x <= y do
+    %PairingHeap{h1 | children: [h2|h1.children]}
+  end
+  def merge(h1, h2) do
+    %PairingHeap{h2 | children: [h1|h2.children]}
+  end
 end
