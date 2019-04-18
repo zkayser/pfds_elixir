@@ -43,10 +43,22 @@ defmodule PairingHeap do
   @spec merge(t(any), t(any)) :: t(any)
   def merge(:empty, heap), do: heap
   def merge(heap, :empty), do: heap
+
   def merge(%PairingHeap{root: x} = h1, %PairingHeap{root: y} = h2) when x <= y do
-    %PairingHeap{h1 | children: [h2|h1.children]}
+    %PairingHeap{h1 | children: [h2 | h1.children]}
   end
+
   def merge(h1, h2) do
-    %PairingHeap{h2 | children: [h1|h2.children]}
+    %PairingHeap{h2 | children: [h1 | h2.children]}
+  end
+
+  @doc """
+  Places the given element in the heap.
+  """
+  @spec insert(t(any), any) :: t(any)
+  def insert(heap, element) do
+    element
+    |> PairingHeap.singleton()
+    |> PairingHeap.merge(heap)
   end
 end

@@ -9,9 +9,7 @@ defmodule PairingHeapTest do
 
   describe "find_min/1" do
     test "returns the minimum element from the heap" do
-      heap = %PairingHeap{root: 4,
-      children: [%PairingHeap{root: 6}, %PairingHeap{root: 7}]
-    }
+      heap = %PairingHeap{root: 4, children: [%PairingHeap{root: 6}, %PairingHeap{root: 7}]}
       assert {:ok, 4} = PairingHeap.find_min(heap)
     end
 
@@ -32,6 +30,27 @@ defmodule PairingHeapTest do
 
       assert merged == %PairingHeap{root: 1, children: [%PairingHeap{root: 10, children: []}]}
       assert merged_2 == %PairingHeap{root: 1, children: [%PairingHeap{root: 10, children: []}]}
+    end
+  end
+
+  describe "insert/2" do
+    test "places the given element into the heap" do
+      result_1 = PairingHeap.insert(PairingHeap.singleton(2), 1)
+
+      result_2 =
+        PairingHeap.singleton(5)
+        |> PairingHeap.insert(10)
+        |> PairingHeap.insert(1)
+        |> PairingHeap.insert(7)
+        |> PairingHeap.insert(4)
+
+      assert result_1.root == 1
+
+      assert result_2.children == [
+               %PairingHeap{children: [], root: 4},
+               %PairingHeap{children: [], root: 7},
+               %PairingHeap{children: [%PairingHeap{children: [], root: 10}], root: 5}
+             ]
     end
   end
 end
