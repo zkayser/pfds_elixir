@@ -29,4 +29,11 @@ defmodule PairingHeap do
   """
   @spec singleton(any) :: t(any)
   def singleton(el), do: %PairingHeap{root: el}
+
+  @doc """
+  Finds and returns the minimum element in the heap.
+  """
+  @spec find_min(t(any)) :: {:ok, any} | {:error, :empty_heap}
+  def find_min(%PairingHeap{root: el}), do: {:ok, el}
+  def find_min(:empty), do: {:error, :empty_heap}
 end
