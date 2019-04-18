@@ -28,9 +28,9 @@ defmodule ExplicitMin do
   for the underlying implementation, `H`).
   #-------------------------------------------------------
   """
-  @valid_heap_impls [LeftistHeap, WeightBiasedLeftistHeap, BinomialHeap, RanklessBinomialHeap]
+  @valid_heap_impls [LeftistHeap, WeightBiasedLeftistHeap, BinomialHeap, RanklessBinomialHeap, PairingHeap]
   @typep implementation ::
-           LeftistHeap | WeightBiasedLeftistHeap | BinomialHeap | RanklessBinomialHeap
+           LeftistHeap | WeightBiasedLeftistHeap | BinomialHeap | RanklessBinomialHeap | PairingHeap
   @type explicit_min(a) :: %{minimum: a | :empty, heap: Heap.heap(a), impl: implementation}
 
   @doc """
