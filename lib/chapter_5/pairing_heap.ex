@@ -79,4 +79,52 @@ defmodule PairingHeap do
     merge(heap_1, heap_2)
     |> merge(merge_pairs(tail))
   end
+
+  defmodule BinTree do
+    @moduledoc """
+
+    #-------------------------------------------------------
+
+    ################
+    # Exercise 5.8 #
+    ################
+
+    Any multiway tree can be represented as a binary tree by
+    converting every multiway node into a binary node whose
+    left child represents the leftmost child of the multiway
+    node and whose right child represents the sibling immediately
+    to the right of the multiway node. If either the leftmost
+    child or the right sibling of the multiway node is missing,
+    then the corresponding field in the binary node is empty.
+    Applied to pairing heaps, this transformation yields half-
+    ordered binary trees in which the element at each node is
+    no greater than any element in its left subtree.
+
+    #-------------------------------------------------------
+    """
+
+    defstruct el: nil, left: :empty, right: :empty
+    @type t(a) :: :empty | %BinTree{el: a, left: t(a), right: t(a)}
+  end
+
+  @doc """
+  Converts a pairing heap from a multiway node
+  representation into a binary tree representation.
+  """
+  @spec to_binary(t(any)) :: BinTree.t(any)
+  def to_binary(:empty), do: :empty
+
+  def to_binary(%PairingHeap{root: root, children: children}) do
+    %BinTree{el: root, left: sub_trees(children)}
+  end
+
+  defp sub_trees([%PairingHeap{root: root, children: children}]) do
+    %BinTree{el: root, left: sub_trees(children)}
+  end
+
+  defp sub_trees([%PairingHeap{root: root, children: children} | rest]) do
+    %BinTree{el: root, right: sub_trees(rest), left: sub_trees(children)}
+  end
+
+  defp sub_trees([]), do: :empty
 end

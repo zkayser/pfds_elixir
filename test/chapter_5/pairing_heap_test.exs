@@ -1,5 +1,6 @@
 defmodule PairingHeapTest do
   use ExUnit.Case
+  alias PairingHeap.BinTree
 
   describe "singleton/1" do
     test "creates a pairing heap with a single element and no children" do
@@ -62,6 +63,18 @@ defmodule PairingHeapTest do
 
     test "returns an error tuple when the heap is empty" do
       assert {:error, :empty_heap} = PairingHeap.delete_min(:empty)
+    end
+  end
+
+  describe "to_binary/1" do
+    test "is a no-op on empty heaps" do
+      assert :empty == PairingHeap.to_binary(:empty)
+    end
+
+    test "converts a pairing heap into a binary tree representation" do
+      assert PairingHeap.singleton(2)
+             |> PairingHeap.insert(3)
+             |> PairingHeap.to_binary() == %BinTree{el: 2, left: %BinTree{el: 3}, right: :empty}
     end
   end
 end
