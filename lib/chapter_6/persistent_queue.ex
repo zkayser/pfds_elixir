@@ -47,6 +47,22 @@ defmodule PersistentQueue do
     end
   end
 
+  @doc """
+  Removes the head of the queue or returns an error
+  tuple if the queue is empty
+  """
+  def tail(%PersistentQueue{length_f: 0}), do: {:error, :empty}
+
+  def tail(%PersistentQueue{front: front} = queue) do
+    case Suspension.force(front) do
+      %Cons{tail: tail} ->
+        {:ok, check(%PersistentQueue{queue | length_f: queue.length_f - 1, front: tail})}
+
+      :empty ->
+        {:error, :empty}
+    end
+  end
+
   defp check(%PersistentQueue{length_f: lenf, length_r: lenr} = q) when lenr <= lenf, do: q
 
   defp check(queue) do
