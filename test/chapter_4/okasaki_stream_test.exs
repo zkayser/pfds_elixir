@@ -102,8 +102,18 @@ defmodule OkasakiStreamTest do
     end
 
     test "reverses the order of a stream" do
-      stream = Suspension.create(%Cons{head: 1, tail: Suspension.create(%Cons{head: 2, tail: Suspension.create(:empty)})})
-      reversed = Suspension.create(%Cons{head: 2, tail: Suspension.create(%Cons{head: 1, tail: Suspension.create(:empty)})})
+      stream =
+        Suspension.create(%Cons{
+          head: 1,
+          tail: Suspension.create(%Cons{head: 2, tail: Suspension.create(:empty)})
+        })
+
+      reversed =
+        Suspension.create(%Cons{
+          head: 2,
+          tail: Suspension.create(%Cons{head: 1, tail: Suspension.create(:empty)})
+        })
+
       assert Stream.reverse(stream) |> Suspension.force() == reversed |> Suspension.force()
     end
   end
