@@ -24,6 +24,7 @@ defmodule PersistentQueue do
   @doc """
   Adds an element to the queue
   """
+  @spec snoc(t(any), any) :: t(any)
   def snoc(%PersistentQueue{} = queue, el) do
     check(%PersistentQueue{
       queue
