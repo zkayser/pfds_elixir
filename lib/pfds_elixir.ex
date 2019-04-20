@@ -1,18 +1,8 @@
 defmodule PfdsElixir do
-  @moduledoc """
-  Documentation for PfdsElixir.
-  """
+  use Application
 
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> PfdsElixir.hello()
-      :world
-
-  """
-  def hello do
-    :world
+  def start(_type, _args) do
+    :ets.new(:memoization, [:public, :named_table])
+    {:ok, self()}
   end
 end

@@ -14,6 +14,7 @@ defmodule PfdsElixir.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
+      mod: {PfdsElixir, []},
       extra_applications: [:logger]
     ]
   end
