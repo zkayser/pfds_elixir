@@ -30,5 +30,9 @@ defmodule PersistentQueueTest do
 
       assert {:ok, Queue.init() |> Queue.snoc(2)} == Queue.tail(queue)
     end
+
+    test "returns an error tuple if the queue is empty" do
+      assert {:error, :empty} = Queue.init() |> Queue.tail()
+    end
   end
 end
