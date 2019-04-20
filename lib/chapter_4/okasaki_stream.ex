@@ -54,4 +54,19 @@ defmodule OkasakiStream do
         drop(tail, n - 1)
     end
   end
+
+  @doc """
+  Reverses a stream
+  """
+  def reverse(stream), do: reverse_(stream, Suspension.create(:empty))
+
+  defp reverse_(suspension, stream) do
+    case Suspension.force(suspension) do
+      :empty ->
+        stream
+
+      %Cons{head: head, tail: tail} ->
+        reverse_(tail, Suspension.create(%Cons{head: head, tail: stream}))
+    end
+  end
 end

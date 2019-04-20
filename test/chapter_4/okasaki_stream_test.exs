@@ -94,4 +94,17 @@ defmodule OkasakiStreamTest do
       assert expected == Stream.drop(stream, 2)
     end
   end
+
+  describe "reverse/1" do
+    test "performs a no-op on an empty stream" do
+      stream = Suspension.create(:empty)
+      assert stream == Stream.reverse(stream)
+    end
+
+    test "reverses the order of a stream" do
+      stream = Suspension.create(%Cons{head: 1, tail: Suspension.create(%Cons{head: 2, tail: Suspension.create(:empty)})})
+      reversed = Suspension.create(%Cons{head: 2, tail: Suspension.create(%Cons{head: 1, tail: Suspension.create(:empty)})})
+      assert Stream.reverse(stream) |> Suspension.force() == reversed |> Suspension.force()
+    end
+  end
 end
