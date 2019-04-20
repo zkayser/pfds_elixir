@@ -32,6 +32,20 @@ defmodule PersistentQueue do
     })
   end
 
+  @doc """
+  Returns the head of the queue or an error
+  tuple if the queue is empty.
+  """
+  @spec head(t(any)) :: {:ok, any} | {:error, :empty}
+  def head(%PersistentQueue{length_f: 0}), do: {:error, :empty}
+
+  def head(%PersistentQueue{front: front}) do
+    case Suspension.force(front) do
+      %Cons{head: head} -> {:ok, head}
+      _ -> {:error, :empty}
+    end
+  end
+
   defp check(%PersistentQueue{length_f: lenf, length_r: lenr} = q) when lenr <= lenf, do: q
 
   defp check(queue) do
