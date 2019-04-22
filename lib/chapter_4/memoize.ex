@@ -13,7 +13,7 @@ defmodule Memoize do
   def get(mod, fun, args) do
     case lookup(mod, fun, args) do
       nil -> memoize_apply(mod, fun, args)
-      result -> result
+      {_, result} -> result
     end
   end
 

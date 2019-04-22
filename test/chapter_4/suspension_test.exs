@@ -11,6 +11,12 @@ defmodule SuspensionTest do
       fun = Suspension.create({Kernel, :+, [1, 2]}) |> Map.get(:fun)
       assert fun.() == 3
     end
+
+    test "also accepts three args in the form of mod, fun, args" do
+      fun = Suspension.create(Kernel, :+, [1, 2]) |> Map.get(:fun)
+      assert fun.() == 3
+      assert fun.() == 3
+    end
   end
 
   describe "force/1" do

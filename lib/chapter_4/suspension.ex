@@ -1,8 +1,20 @@
 defmodule Suspension do
   @type t(a) :: %Suspension{fun: (() -> a)}
   @typep fun_expression :: {atom, atom, list(any)} | any
+  @typep mod :: atom
+  @typep func :: atom
+  @typep args :: list(any)
 
   defstruct fun: nil
+
+  @spec create(mod, func, args) :: t(any)
+  def create(mod, fun, args) do
+    %Suspension{
+      fun: fn ->
+        Memoize.get(mod, fun, args)
+      end
+    }
+  end
 
   @spec create(fun_expression) :: t(any)
   def create({mod, fun, args}) do
