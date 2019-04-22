@@ -17,7 +17,7 @@ defmodule OkasakiStream do
         stream_2
 
       %Cons{head: el, tail: tail} ->
-        Suspension.create(%Cons{head: el, tail: append(tail, stream_2)})
+        Suspension.create(Kernel, :struct, [Cons, [head: el, tail: append(tail, stream_2)]])
     end
   end
 
@@ -35,7 +35,7 @@ defmodule OkasakiStream do
         stream
 
       %Cons{head: head, tail: tail} ->
-        Suspension.create(%Cons{head: head, tail: take(tail, n - 1)})
+        Suspension.create(Kernel, :struct, [Cons, [head: head, tail: take(tail, n - 1)]])
     end
   end
 
@@ -66,7 +66,7 @@ defmodule OkasakiStream do
         stream
 
       %Cons{head: head, tail: tail} ->
-        reverse_(tail, Suspension.create(%Cons{head: head, tail: stream}))
+        reverse_(tail, Suspension.create(Kernel, :struct, [Cons, [head: head, tail: stream]]))
     end
   end
 end

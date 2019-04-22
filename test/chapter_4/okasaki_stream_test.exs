@@ -105,13 +105,15 @@ defmodule OkasakiStreamTest do
       stream =
         Suspension.create(%Cons{
           head: 1,
-          tail: Suspension.create(%Cons{head: 2, tail: Suspension.create(:empty)})
+          tail:
+            Suspension.create(Kernel, :struct, [Cons, [head: 2, tail: Suspension.create(:empty)]])
         })
 
       reversed =
         Suspension.create(%Cons{
           head: 2,
-          tail: Suspension.create(%Cons{head: 1, tail: Suspension.create(:empty)})
+          tail:
+            Suspension.create(Kernel, :struct, [Cons, [head: 1, tail: Suspension.create(:empty)]])
         })
 
       assert Stream.reverse(stream) |> Suspension.force() == reversed |> Suspension.force()
