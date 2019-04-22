@@ -15,10 +15,7 @@ defmodule OkasakiStream do
 
   def from_list(list) do
     Enum.reduce(:lists.reverse(list), Suspension.create(:empty), fn el, acc ->
-      append(
-        Suspension.create(Kernel, :struct, [Cons, [head: el, tail: Suspension.create(:empty)]]),
-        acc
-      )
+      append(suspend(el, empty()), acc)
     end)
   end
 
@@ -32,7 +29,7 @@ defmodule OkasakiStream do
         stream_2
 
       %Cons{head: el, tail: tail} ->
-        Suspension.create(Kernel, :struct, [Cons, [head: el, tail: append(tail, stream_2)]])
+        suspend(el, append(tail, stream_2))
     end
   end
 
@@ -42,7 +39,7 @@ defmodule OkasakiStream do
   in the stream.
   """
   @spec take(t(any), non_neg_integer) :: t(any)
-  def take(_stream, 0), do: Suspension.create(:empty)
+  def take(_stream, 0), do: empty()
 
   def take(stream, n) do
     case Suspension.force(stream) do
@@ -50,7 +47,7 @@ defmodule OkasakiStream do
         stream
 
       %Cons{head: head, tail: tail} ->
-        Suspension.create(Kernel, :struct, [Cons, [head: head, tail: take(tail, n - 1)]])
+        suspend(head, take(tail, n - 1))
     end
   end
 
@@ -73,7 +70,7 @@ defmodule OkasakiStream do
   @doc """
   Reverses a stream
   """
-  def reverse(stream), do: reverse_(stream, Suspension.create(:empty))
+  def reverse(stream), do: reverse_(stream, empty())
 
   defp reverse_(suspension, stream) do
     case Suspension.force(suspension) do
@@ -81,7 +78,15 @@ defmodule OkasakiStream do
         stream
 
       %Cons{head: head, tail: tail} ->
-        reverse_(tail, Suspension.create(Kernel, :struct, [Cons, [head: head, tail: stream]]))
+        reverse_(tail, suspend(head, stream))
     end
   end
+
+  # helper for suspending the creation of a Cons struct
+  defp suspend(el, tail) do
+    Suspension.create(Kernel, :struct, [Cons, [head: el, tail: tail]])
+  end
+
+  # helper for creating an empty stream
+  def empty(), do: Suspension.create(:empty)
 end
