@@ -73,10 +73,9 @@ defmodule OkasakiStream do
   @spec reverse(t(any)) :: Suspension.t(t(any))
   def reverse(stream) do
     Suspension.create(__MODULE__, :reverse, [stream, empty()])
-    |> Suspension.force()
   end
 
-  @spec reverse(Suspension.t(t(any)), t(any)) :: t(any)
+  @spec reverse(t(any), t(any)) :: t(any)
   def reverse(suspension, stream) do
     case Suspension.force(suspension) do
       :empty ->

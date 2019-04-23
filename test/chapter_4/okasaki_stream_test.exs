@@ -98,12 +98,14 @@ defmodule OkasakiStreamTest do
   describe "reverse/1" do
     test "performs a no-op on an empty stream" do
       stream = Suspension.create(:empty)
-      assert stream == Stream.reverse(stream)
+      assert stream == Stream.reverse(stream) |> Suspension.force()
     end
 
     test "reverses the order of a stream" do
       stream = Stream.from_list(for x <- 1..5, do: x)
-      assert Stream.reverse(stream) == Stream.from_list(for x <- 5..1, do: x)
+
+      assert Stream.reverse(stream) |> Suspension.force() ==
+               Stream.from_list(for x <- 5..1, do: x)
     end
   end
 

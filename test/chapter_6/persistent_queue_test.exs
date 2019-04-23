@@ -15,7 +15,6 @@ defmodule PersistentQueueTest do
   describe "head/1" do
     test "returns the head element from the queue" do
       queue = Queue.init() |> Queue.snoc(2)
-
       assert {:ok, 2} = Queue.head(queue)
     end
 

@@ -68,7 +68,7 @@ defmodule PersistentQueue do
   defp check(queue) do
     %PersistentQueue{
       length_f: queue.length_f + queue.length_r,
-      front: Stream.append(queue.front, Stream.reverse(queue.rear)),
+      front: Stream.append(queue.front, Suspension.force(Stream.reverse(queue.rear))),
       length_r: 0,
       rear: Suspension.create(:empty)
     }
