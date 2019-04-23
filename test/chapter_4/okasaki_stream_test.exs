@@ -102,21 +102,8 @@ defmodule OkasakiStreamTest do
     end
 
     test "reverses the order of a stream" do
-      stream =
-        Suspension.create(%Cons{
-          head: 1,
-          tail:
-            Suspension.create(Kernel, :struct, [Cons, [head: 2, tail: Suspension.create(:empty)]])
-        })
-
-      reversed =
-        Suspension.create(%Cons{
-          head: 2,
-          tail:
-            Suspension.create(Kernel, :struct, [Cons, [head: 1, tail: Suspension.create(:empty)]])
-        })
-
-      assert Stream.reverse(stream) |> Suspension.force() == reversed |> Suspension.force()
+      stream = Stream.from_list(for x <- 1..5, do: x)
+      assert Stream.reverse(stream) == Stream.from_list(for x <- 5..1, do: x)
     end
   end
 

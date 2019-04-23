@@ -70,15 +70,20 @@ defmodule OkasakiStream do
   @doc """
   Reverses a stream
   """
-  def reverse(stream), do: reverse_(stream, empty())
+  @spec reverse(t(any)) :: Suspension.t(t(any))
+  def reverse(stream) do
+     Suspension.create(__MODULE__, :reverse, [stream, empty()])
+     |> Suspension.force()
+  end
 
-  defp reverse_(suspension, stream) do
+  @spec reverse(Suspension.t(t(any)), t(any)) :: t(any)
+  def reverse(suspension, stream) do
     case Suspension.force(suspension) do
       :empty ->
         stream
 
       %Cons{head: head, tail: tail} ->
-        reverse_(tail, suspend(head, stream))
+        reverse(tail, suspend(head, stream))
     end
   end
 
