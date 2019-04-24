@@ -1,5 +1,5 @@
-defmodule PersistentQueueTest do
-  alias PersistentQueue, as: Queue
+defmodule BankersQueueTest do
+  alias BankersQueue, as: Queue
   use ExUnit.Case
 
   describe "snoc/2" do
