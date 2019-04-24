@@ -7,4 +7,15 @@ defmodule LazyBinomialHeap do
   """
   @spec empty() :: t(any)
   def empty, do: Suspension.create([])
+
+  @doc """
+  Returns true if the heap is empty
+  """
+  @spec empty?(t(any)) :: boolean
+  def empty?(heap) do
+    case Suspension.force(heap) do
+      [] -> true
+      _ -> false
+    end
+  end
 end

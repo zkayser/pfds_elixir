@@ -7,4 +7,10 @@ defmodule LazyBinomialHeapTest do
       assert Heap.empty() == Suspension.create([])
     end
   end
+
+  describe "empty?/1" do
+    test "returns true if the heap is empty" do
+      assert Heap.empty?(Heap.empty())
+    end
+  end
 end
