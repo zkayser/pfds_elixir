@@ -21,4 +21,23 @@ defmodule LazyBinomialHeapTest do
       assert Heap.link(tree_1, tree_2) == %{tree_1 | rank: 2, children: [tree_2]}
     end
   end
+
+  describe "insert_tree/2" do
+    test "given an empty list of trees, will place the passed in tree into a singleton heap" do
+      tree = %{rank: 1, element: 1, children: []}
+      assert Heap.insert_tree(tree, []) == [tree]
+    end
+
+    test "places the tree passed in as the leftmost element in the trees list if its rank is less than the first tree in the heap" do
+      tree = %{rank: 1, element: 1, children: []}
+      assert Heap.insert_tree(tree, [%{rank: 2, element: 2, children: []}]) |> hd() == tree
+    end
+
+    test "links the tree being passed in with the first tree in the list before inserting into the heap" do
+      tree = %{rank: 1, element: 1, children: []}
+      tree_2 = %{rank: 1, element: 2, children: []}
+      linked = Heap.link(tree, tree_2)
+      assert Heap.insert_tree(tree, [tree_2]) == [linked]
+    end
+  end
 end

@@ -30,4 +30,17 @@ defmodule LazyBinomialHeap do
       _ -> %{tree_2 | rank: tree_1.rank + 1, children: [tree_1 | c2]}
     end
   end
+
+  @doc """
+  Inserts a binomial tree into the heap
+  """
+  @spec insert_tree(tree(any), list(tree(any))) :: list(tree(any))
+  def insert_tree(tree, []), do: [tree]
+
+  def insert_tree(%{rank: r1} = tree, [%{rank: r2} = tree_ | trees] = heap) do
+    case r1 < r2 do
+      true -> [tree | heap]
+      _ -> tree |> link(tree_) |> insert_tree(trees)
+    end
+  end
 end
