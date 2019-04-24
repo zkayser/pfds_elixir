@@ -40,4 +40,26 @@ defmodule LazyBinomialHeapTest do
       assert Heap.insert_tree(tree, [tree_2]) == [linked]
     end
   end
+
+  describe "mrg/2" do
+    test "returns the non-empty heap when merging one empty and one non-empty heap" do
+      heap = [%{rank: 1, element: 1, children: []}]
+      assert Heap.mrg(heap, []) == heap
+      assert Heap.mrg([], heap) == heap
+    end
+
+    test "places the leading binomial tree with the smaller rank as the leftmost tree in the resulting heap" do
+      tree = %{rank: 1, element: 1, children: []}
+      tree_2 = %{rank: 2, element: 2, children: []}
+      assert Heap.mrg([tree], [tree_2]) |> hd() == tree
+      assert Heap.mrg([tree_2], [tree]) |> hd() == tree
+    end
+
+    test "links the leading binomial trees from each heap if both trees are of the same rank" do
+      tree = %{rank: 1, element: 1, children: []}
+      tree_2 = %{rank: 1, element: 2, children: []}
+      linked = Heap.link(tree, tree_2)
+      assert Heap.mrg([tree], [tree_2]) == [linked]
+    end
+  end
 end

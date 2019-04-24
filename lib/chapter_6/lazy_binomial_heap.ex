@@ -1,6 +1,7 @@
 defmodule LazyBinomialHeap do
   @typep tree(a) :: %{rank: non_neg_integer(), element: a, children: list(tree(a))}
-  @type t(a) :: Suspension.t(list(tree(a)))
+  @type heap(a) :: list(tree(a))
+  @type t(a) :: Suspension.t(heap(a))
 
   @doc """
   Initializes an empty heap
@@ -41,6 +42,21 @@ defmodule LazyBinomialHeap do
     case r1 < r2 do
       true -> [tree | heap]
       _ -> tree |> link(tree_) |> insert_tree(trees)
+    end
+  end
+
+  @doc """
+  Merges two heaps together
+  """
+  @spec mrg(heap(any), heap(any)) :: heap(any)
+  def mrg(heap, []), do: heap
+  def mrg([], heap), do: heap
+
+  def mrg([%{rank: r1} = t1 | trees_1] = heap_1, [%{rank: r2} = t2 | trees_2] = heap_2) do
+    cond do
+      r1 < r2 -> [t1 | mrg(trees_1, heap_2)]
+      r2 < r1 -> [t2 | mrg(heap_1, trees_2)]
+      true -> link(t1, t2) |> insert_tree(mrg(trees_1, trees_2))
     end
   end
 end
