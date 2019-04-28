@@ -38,4 +38,5 @@ defmodule Lazy do
   end
 
   defp get_arg({arg, _context, nil}, arg_list), do: [arg | arg_list]
+  defp get_arg(_primitive, arg_list), do: arg_list
 end
