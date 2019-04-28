@@ -3,21 +3,7 @@ defmodule Lazy do
     {_, args_ast} = name_and_args(head)
     args = get_args(args_ast)
 
-    add_suspension_forcers = fn
-      {param, context, nil} = node ->
-        if param in args do
-          quote do
-            Suspension.force(unquote({param, context, nil}))
-          end
-        else
-          node
-        end
-
-      node ->
-        node
-    end
-
-    ast = Macro.postwalk(body[:do], add_suspension_forcers)
+    ast = Macro.postwalk(body[:do], fn node -> force_suspensions(node, args) end)
 
     quote do
       def unquote(head) do
@@ -35,6 +21,20 @@ defmodule Lazy do
   defp name_and_args(short_head) do
     Macro.decompose_call(short_head)
   end
+
+  defp force_suspensions({param, context, nil} = node, args) do
+    case param in args do
+      true ->
+        quote do
+          Suspension.force(unquote({param, context, nil}))
+        end
+
+      false ->
+        node
+    end
+  end
+
+  defp force_suspensions(node, _), do: node
 
   defp get_args(args_ast) when is_list(args_ast) do
     Enum.reduce(args_ast, [], &get_arg/2)
