@@ -43,4 +43,30 @@ defmodule LazyStream do
         %Cons{head: head, tail: take(tail, n - 1)}
     end
   end
+
+  @doc """
+  Drops the first n values of the stream.
+  """
+  @spec drop(t(any), non_neg_integer) :: t(any)
+  deflazy drop(stream, n) do
+    drop_(stream, n)
+  end
+
+  defp drop_(stream, 0), do: stream
+
+  defp drop_(:empty, _), do: :empty
+
+  defp drop_(%Cons{tail: tail}, n) do
+    drop_(tail, n - 1)
+  end
+
+  defp drop_(stream, n) do
+    case Suspension.force(stream) do
+      :empty ->
+        :empty
+
+      %Cons{tail: tail} ->
+        drop_(tail, n - 1)
+    end
+  end
 end

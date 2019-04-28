@@ -64,36 +64,48 @@ defmodule LazyStreamTest do
     end
   end
 
-  # describe "drop/2" do
-  #   test "returns the stream as is when 0 is passed for _n_" do
-  #     stream = Suspension.create(%Cons{head: 1, tail: Suspension.create(:empty)})
-  #     assert stream == Stream.drop(stream, 0)
-  #   end
+  describe "drop/2" do
+    test "returns the stream as is when 0 is passed for _n_" do
+      stream = Suspension.create(%Cons{head: 1, tail: Suspension.create(:empty)})
+      assert Suspension.force(stream) == Stream.drop(stream, 0) |> Lazy.eval()
+    end
 
-  #   test "returns the stream as is when the stream is empty" do
-  #     stream = Suspension.create(:empty)
-  #     assert stream == Stream.drop(stream, 10)
-  #   end
+    test "returns the stream as is when the stream is empty" do
+      stream = Suspension.create(:empty)
+      assert Suspension.force(stream) == Stream.drop(stream, 10) |> Lazy.eval()
+    end
 
-  #   test "returns the stream with the first _n_ elements dropped" do
-  #     stream =
-  #       Suspension.create(%Cons{
-  #         head: 1,
-  #         tail:
-  #           Suspension.create(%Cons{
-  #             head: 2,
-  #             tail:
-  #               Suspension.create(%Cons{
-  #                 head: 3,
-  #                 tail: Suspension.create(:empty)
-  #               })
-  #           })
-  #       })
+    test "returns the stream with the first _n_ elements dropped" do
+      stream =
+        Suspension.create(%Cons{
+          head: 1,
+          tail:
+            Suspension.create(%Cons{
+              head: 2,
+              tail:
+                Suspension.create(%Cons{
+                  head: 3,
+                  tail:
+                    Suspension.create(%Cons{
+                      head: 4,
+                      tail: Suspension.create(:empty)
+                    })
+                })
+            })
+        })
 
-  #     expected = Suspension.create(%Cons{head: 3, tail: Suspension.create(:empty)})
-  #     assert expected == Stream.drop(stream, 2)
-  #   end
-  # end
+      expected =
+        Suspension.create(%Cons{
+          head: 3,
+          tail: Suspension.create(%Cons{head: 4, tail: Suspension.create(:empty)})
+        })
+
+      expected_2 = Suspension.create(%Cons{head: 4, tail: Suspension.create(:empty)})
+
+      assert expected == Stream.drop(stream, 2) |> Lazy.eval()
+      assert expected_2 == Stream.drop(stream, 3) |> Lazy.eval()
+    end
+  end
 
   # describe "reverse/1" do
   #   test "performs a no-op on an empty stream" do

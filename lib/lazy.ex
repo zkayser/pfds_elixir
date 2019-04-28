@@ -6,7 +6,9 @@ defmodule Lazy do
     add_suspension_forcers = fn
       {param, context, nil} = node ->
         if param in args do
-          quote do: Suspension.force(unquote({param, context, nil}))
+          quote do
+            Suspension.force(unquote({param, context, nil}))
+          end
         else
           node
         end
@@ -19,11 +21,12 @@ defmodule Lazy do
 
     quote do
       def unquote(head) do
-        unquote(ast)
-        |> Suspension.create()
+        %Suspension{fun: fn -> unquote(ast) end}
       end
     end
   end
+
+  def eval(arg), do: Suspension.force(arg)
 
   defp name_and_args({:when, _, [short_head | _]}) do
     name_and_args(short_head)
