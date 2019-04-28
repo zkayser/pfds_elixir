@@ -1,13 +1,28 @@
 defmodule Lazy do
   defmacro deflazy(head, body) do
-    {_, args_ast} = name_and_args(head)
+    {func_name, args_ast} = name_and_args(head)
     args = get_args(args_ast)
 
     ast = Macro.postwalk(body[:do], fn node -> force_suspensions(node, args) end)
 
+    actual_work_ast =
+      Macro.postwalk(head, fn
+        {func, context, args} when func == func_name ->
+          {:"#{func_name}_lazy_implementation", context, args}
+
+        node ->
+          node
+      end)
+
+    {worker_func, _} = name_and_args(actual_work_ast)
+
     quote do
       def unquote(head) do
-        %Suspension{fun: fn -> unquote(ast) end}
+        Suspension.create(__MODULE__, unquote(worker_func), unquote(args_ast))
+      end
+
+      def unquote(actual_work_ast) do
+        unquote(ast)
       end
     end
   end
