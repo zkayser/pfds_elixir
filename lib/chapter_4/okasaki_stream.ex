@@ -1,4 +1,6 @@
 defmodule OkasakiStream do
+  # import Lazy
+
   defmodule Cons do
     @type t(a) :: %Cons{head: a, tail: OkasakiStream.t(a)}
     defstruct [:head, :tail]
@@ -51,6 +53,20 @@ defmodule OkasakiStream do
     end
   end
 
+  # deflazy ltake(stream, 0) do
+  #   empty()
+  # end
+
+  # deflazy ltake(stream, n) do
+  #   case stream do
+  #     :empty ->
+  #       stream
+
+  #     %Cons{head: head, tail: tail} ->
+  #       suspend(head, take(tail, n - 1))
+  #   end
+  # end
+
   @doc """
   Drops the first n values of the stream.
   """
@@ -74,6 +90,17 @@ defmodule OkasakiStream do
   def reverse(stream) do
     Suspension.create(__MODULE__, :reverse, [stream, empty()])
   end
+
+  # deflazy reverse(stream) do
+  #   reverse(stream, empty())
+  # end
+
+  # def reverse(stream, reversed) do
+  #   case Suspension.force(stream) do
+  #     :empty -> reversed
+  #     %Cons{head: head, tail: tail} -> reverse(tail, Suspension.create(Kernel, :struct [[head: head, tail: reversed]]))
+  #   end
+  # end
 
   @spec reverse(t(any), t(any)) :: t(any)
   def reverse(suspension, stream) do

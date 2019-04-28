@@ -37,4 +37,6 @@ defmodule Suspension do
   def force(%Suspension{fun: susp}) do
     susp.()
   end
+
+  def force(val), do: val
 end
