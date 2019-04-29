@@ -64,12 +64,12 @@ defmodule LazyBinomialHeap do
   def find_min(heap) do
     case remove_min_tree(Suspension.force(heap)) do
       {:error, :empty} -> {:error, :empty}
-      {:ok, tree} -> {:ok, tree.element}
+      {tree, _} -> {:ok, tree.element}
     end
   end
 
   defp remove_min_tree([]), do: {:error, :empty}
-  defp remove_min_tree([tree]), do: {:ok, tree}
+  defp remove_min_tree([tree]), do: {tree, []}
 
   defp remove_min_tree([tree | trees]) do
     {tree_, trees_} = remove_min_tree(trees)
@@ -101,6 +101,23 @@ defmodule LazyBinomialHeap do
       r1 < r2 -> [t1 | mrg(trees_1, heap_2)]
       r2 < r1 -> [t2 | mrg(heap_1, trees_2)]
       true -> link(t1, t2) |> insert_tree(mrg(trees_1, trees_2))
+    end
+  end
+
+  @doc """
+  Removes the minimum tree and reorganizes the
+  binomial trees within the heap, returning
+  {:ok, heap} on success OR {:error, :empty} when
+  passed an empty heap
+  """
+  @spec delete_min(t(any)) :: Suspension.t(any)
+  deflazy delete_min(heap) do
+    case remove_min_tree(heap) do
+      {%{children: children}, remaining_trees} ->
+        {:ok, mrg(:lists.reverse(children), remaining_trees)}
+
+      {:error, :empty} ->
+        {:error, :empty}
     end
   end
 end

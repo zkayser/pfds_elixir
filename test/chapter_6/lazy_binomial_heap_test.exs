@@ -126,4 +126,21 @@ defmodule LazyBinomialHeapTest do
       assert Heap.merge([], heap) |> Lazy.eval() == Suspension.force(heap)
     end
   end
+
+  describe "delete_min/1" do
+    test "immediately returns a suspension" do
+      assert %Suspension{} = Heap.delete_min(Heap.empty())
+    end
+
+    test "removes the minimum tree in the heap when evaluated" do
+      heap =
+        Heap.empty()
+        |> Heap.insert(2)
+        |> Heap.insert(4)
+        |> Heap.insert(3)
+
+      assert {:ok, [%{children: [%{children: [], element: 4, rank: 0}], element: 3, rank: 1}]} ==
+               Heap.delete_min(heap) |> Lazy.eval()
+    end
+  end
 end
