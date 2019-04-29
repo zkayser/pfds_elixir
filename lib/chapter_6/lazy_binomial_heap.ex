@@ -1,4 +1,6 @@
 defmodule LazyBinomialHeap do
+  import Lazy
+
   @typep tree(a) :: %{rank: non_neg_integer(), element: a, children: list(tree(a))}
   @type heap(a) :: list(tree(a))
   @type t(a) :: Suspension.t(heap(a))
@@ -43,6 +45,14 @@ defmodule LazyBinomialHeap do
       true -> [tree | heap]
       _ -> tree |> link(tree_) |> insert_tree(trees)
     end
+  end
+
+  @doc """
+  Inserts an element into the heap
+  """
+  @spec insert(t(any), any) :: t(any)
+  deflazy insert(heap, el) do
+    insert_tree(%{rank: 0, element: el, children: []}, heap)
   end
 
   @doc """
