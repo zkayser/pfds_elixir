@@ -56,6 +56,31 @@ defmodule LazyBinomialHeap do
   end
 
   @doc """
+  Finds an returns the minimum value in the heap
+  if the heap is non-empty. Returns an error tuple
+  otherwise.
+  """
+  @spec find_min(t(any)) :: {:ok, any} | {:error, :empty}
+  def find_min(heap) do
+    case remove_min_tree(Suspension.force(heap)) do
+      {:error, :empty} -> {:error, :empty}
+      {:ok, tree} -> {:ok, tree.element}
+    end
+  end
+
+  defp remove_min_tree([]), do: {:error, :empty}
+  defp remove_min_tree([tree]), do: {:ok, tree}
+
+  defp remove_min_tree([tree | trees]) do
+    {tree_, trees_} = remove_min_tree(trees)
+
+    case tree.element <= tree_.element do
+      true -> {tree, trees}
+      _ -> {tree_, [tree | trees_]}
+    end
+  end
+
+  @doc """
   Merges two heaps together
   """
   @spec mrg(heap(any), heap(any)) :: heap(any)

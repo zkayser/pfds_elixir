@@ -76,6 +76,23 @@ defmodule LazyBinomialHeapTest do
     end
   end
 
+  describe "find_min/1" do
+    test "returns the minimum value in non-empty heaps" do
+      assert {:ok, 1} =
+               Heap.empty()
+               |> Heap.insert(5)
+               |> Heap.insert(8)
+               |> Heap.insert(1)
+               |> Heap.insert(4)
+               |> Lazy.eval()
+               |> Heap.find_min()
+    end
+
+    test "returns an error tuple when given an empty heap" do
+      assert {:error, :empty} = Heap.empty() |> Heap.find_min()
+    end
+  end
+
   describe "mrg/2" do
     test "returns the non-empty heap when merging one empty and one non-empty heap" do
       heap = [%{rank: 1, element: 1, children: []}]
