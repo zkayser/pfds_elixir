@@ -121,14 +121,14 @@ defmodule LazyStreamTest do
   #   end
   # end
 
-  # describe "from_list/1" do
-  #   test "turns a list into a stream" do
-  #     stream = Stream.from_list([1, 2, 3])
+  describe "from_list/1" do
+    test "turns a list into a stream" do
+      stream = Stream.from_list([1, 2, 3])
 
-  #     assert %Cons{head: 1, tail: tail} = Suspension.force(stream)
-  #     assert %Cons{head: 2, tail: tail} = Suspension.force(tail)
-  #     assert %Cons{head: 3, tail: tail} = Suspension.force(tail)
-  #     assert :empty == Suspension.force(tail)
-  #   end
-  # end
+      assert %Cons{head: 1, tail: tail} = Suspension.force(stream)
+      assert %Cons{head: 2, tail: tail} = Suspension.force(tail)
+      assert %Cons{head: 3, tail: tail} = Suspension.force(tail)
+      assert :empty == Suspension.force(tail)
+    end
+  end
 end

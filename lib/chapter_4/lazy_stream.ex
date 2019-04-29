@@ -10,6 +10,18 @@ defmodule LazyStream do
   @type t(a) :: Suspension.t(cell(a))
 
   @doc """
+  Converts a list into a stream
+  """
+  @spec from_list(list(any)) :: t(any)
+  def from_list([]), do: Suspension.create(:empty)
+
+  def from_list(list) do
+    Enum.reduce(:lists.reverse(list), Suspension.create(:empty), fn el, acc ->
+      append(%Cons{head: el, tail: Suspension.create(:empty)}, acc)
+    end)
+  end
+
+  @doc """
   Appends two streams together, immediately
   returning a suspension.
   """
