@@ -35,7 +35,6 @@ defmodule Suspension do
 
   @spec force(t(any)) :: any
   def force(%Suspension{fun: susp}) do
-    IO.puts("Forcing a real suspension...")
     susp.()
   end
 
