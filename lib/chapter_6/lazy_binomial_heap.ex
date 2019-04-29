@@ -81,6 +81,15 @@ defmodule LazyBinomialHeap do
   end
 
   @doc """
+  Returns a Suspension that will merge two
+  heaps together when evaluated
+  """
+  @spec merge(t(any), t(any)) :: t(any)
+  deflazy merge(heap_1, heap_2) do
+    mrg(heap_1, heap_2)
+  end
+
+  @doc """
   Merges two heaps together
   """
   @spec mrg(heap(any), heap(any)) :: heap(any)

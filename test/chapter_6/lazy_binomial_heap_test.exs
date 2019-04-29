@@ -114,4 +114,16 @@ defmodule LazyBinomialHeapTest do
       assert Heap.mrg([tree], [tree_2]) == [linked]
     end
   end
+
+  describe "merge/2" do
+    test "immediately returns a suspension" do
+      assert %Suspension{} = Heap.merge(Heap.empty(), Heap.empty())
+    end
+
+    test "shells out to mrg/2 implementation when forced" do
+      heap = Suspension.create([%{rank: 1, element: 1, children: []}])
+      assert Heap.merge(heap, Heap.empty()) |> Lazy.eval() == Suspension.force(heap)
+      assert Heap.merge([], heap) |> Lazy.eval() == Suspension.force(heap)
+    end
+  end
 end
