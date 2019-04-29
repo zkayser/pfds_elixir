@@ -42,15 +42,37 @@ defmodule LazyBinomialHeapTest do
   end
 
   describe "insert/2" do
-    test "places a singleton tree as the only tree in a heap when inserting into an empty heap" do
+    test "places an element as part of a singleton tree into an heap" do
       tree = %{rank: 0, element: 1, children: []}
 
       assert []
              |> Suspension.create()
              |> Heap.insert(1)
              |> Lazy.eval()
-             |> Suspension.force() ==
-               [tree]
+             |> Suspension.force() == [tree]
+    end
+
+    test "places an element into a non-empty heaps" do
+      expected = [
+        %{children: [], element: 5, rank: 0},
+        %{
+          children: [
+            %{children: [%{children: [], element: 4, rank: 0}], element: 3, rank: 1},
+            %{children: [], element: 2, rank: 0}
+          ],
+          element: 1,
+          rank: 2
+        }
+      ]
+
+      assert Heap.empty()
+             |> Heap.insert(1)
+             |> Heap.insert(2)
+             |> Heap.insert(3)
+             |> Heap.insert(4)
+             |> Heap.insert(5)
+             |> Lazy.eval()
+             |> Suspension.force() == expected
     end
   end
 
