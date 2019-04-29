@@ -107,19 +107,23 @@ defmodule LazyStreamTest do
     end
   end
 
-  # describe "reverse/1" do
-  #   test "performs a no-op on an empty stream" do
-  #     stream = Suspension.create(:empty)
-  #     assert stream == Stream.reverse(stream) |> Suspension.force()
-  #   end
+  describe "reverse/1" do
+    test "performs a no-op on an empty stream" do
+      stream = Suspension.create(:empty)
+      assert stream == Stream.reverse(stream) |> Suspension.force()
+    end
 
-  #   test "reverses the order of a stream" do
-  #     stream = Stream.from_list(for x <- 1..5, do: x)
+    test "reverses the order of a stream" do
+      stream = Stream.from_list(for x <- 1..5, do: x)
 
-  #     assert Stream.reverse(stream) |> Suspension.force() ==
-  #              Stream.from_list(for x <- 5..1, do: x)
-  #   end
-  # end
+      assert stream
+             |> Stream.reverse()
+             |> Lazy.eval()
+             |> Stream.to_list() ==
+               Stream.from_list(for x <- 5..1, do: x)
+               |> Stream.to_list()
+    end
+  end
 
   describe "from_list/1" do
     test "turns a list into a stream" do
@@ -129,6 +133,14 @@ defmodule LazyStreamTest do
       assert %Cons{head: 2, tail: tail} = Suspension.force(tail)
       assert %Cons{head: 3, tail: tail} = Suspension.force(tail)
       assert :empty == Suspension.force(tail)
+    end
+  end
+
+  describe "to_list" do
+    test "turns a stream into a list" do
+      stream = Stream.from_list([1, 2, 3])
+
+      assert Stream.to_list(stream) == [1, 2, 3]
     end
   end
 end

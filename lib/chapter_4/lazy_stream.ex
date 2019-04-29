@@ -1,4 +1,13 @@
 defmodule LazyStream do
+  @moduledoc """
+  A stream module exposing lazy functions.
+
+  With the exception of `from_list/1` and `to_list/1`,
+  the functions declared in this module instantly
+  return unevaluated `Suspension`s and defer their
+  evaluations until forced with `Lazy.eval/0`.
+  """
+
   import Lazy
 
   defmodule Cons do
@@ -19,6 +28,20 @@ defmodule LazyStream do
     Enum.reduce(:lists.reverse(list), Suspension.create(:empty), fn el, acc ->
       append(%Cons{head: el, tail: Suspension.create(:empty)}, acc)
     end)
+  end
+
+  @doc """
+  Converts a stream into a list
+  """
+  def to_list(stream) do
+    to_list_(stream, [])
+  end
+
+  defp to_list_(stream, acc) do
+    case Suspension.force(stream) do
+      :empty -> :lists.reverse(acc)
+      %Cons{head: el, tail: tail} -> to_list_(tail, [el | acc])
+    end
   end
 
   @doc """
@@ -81,4 +104,19 @@ defmodule LazyStream do
         drop_(tail, n - 1)
     end
   end
+
+  @doc """
+  Reverses a stream
+  """
+  @spec reverse(t(any)) :: Suspension.t(t(any))
+  deflazy reverse(stream) do
+    reverse_(stream, Suspension.create(:empty))
+  end
+
+  defp reverse_(:empty, reversed), do: reversed
+
+  defp reverse_(%Cons{head: head, tail: tail}, reversed),
+    do: reverse_(Suspension.create(Kernel, :struct, [Cons, [head: head, tail: reversed]]), tail)
+
+  defp reverse_(reversed, stream), do: reverse_(Suspension.force(stream), reversed)
 end

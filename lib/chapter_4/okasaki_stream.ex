@@ -1,6 +1,4 @@
 defmodule OkasakiStream do
-  # import Lazy
-
   defmodule Cons do
     @type t(a) :: %Cons{head: a, tail: OkasakiStream.t(a)}
     defstruct [:head, :tail]
