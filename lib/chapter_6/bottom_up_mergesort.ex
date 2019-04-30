@@ -26,4 +26,13 @@ defmodule BottomUpMergeSort do
   """
   @spec init() :: t(any)
   def init(), do: %__MODULE__{size: 0, segments: Suspension.create([])}
+
+  @doc """
+  Merges two ordered lists together.
+  """
+  @spec mrg(list(any), list(any)) :: list(any)
+  def mrg([], list), do: list
+  def mrg(list, []), do: list
+  def mrg([x | xs_], [y | _] = ys) when x <= y, do: [x | mrg(xs_, ys)]
+  def mrg(xs, [y | ys_]), do: [y | mrg(xs, ys_)]
 end
