@@ -57,13 +57,7 @@ defmodule BottomUpMergeSort do
   """
   @spec sort(t(any)) :: list(any)
   def sort(%__MODULE__{} = collection) do
-    mrgAll([], Suspension.force(collection.segments))
-  end
-
-  defp mrgAll(acc, []), do: acc
-
-  defp mrgAll(acc, [segment | segments]) do
-    mrgAll(mrg(acc, segment), segments)
+    :lists.foldl(&mrg/2, [], Suspension.force(collection.segments))
   end
 
   @spec add_segment(list(any), list(any), non_neg_integer) :: list(any)
