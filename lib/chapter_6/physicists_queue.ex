@@ -59,4 +59,32 @@ defmodule PhysicistsQueue do
   @spec empty?(t(any)) :: boolean
   def empty?(%PhysicistsQueue{length_f: 0}), do: true
   def empty?(_), do: false
+
+  @doc """
+  Adds an element to the queue.
+  """
+  @spec snoc(t(any), any) :: t(any)
+  def snoc(queue, element),
+    do:
+      check(%PhysicistsQueue{queue | length_r: queue.length_r + 1, rear: [element | queue.rear]})
+
+  defp check(%PhysicistsQueue{length_f: front, length_r: rear} = queue) when rear <= front,
+    do: check_w(queue)
+
+  defp check(%PhysicistsQueue{} = queue) do
+    front_ = Suspension.force(queue.front)
+
+    check_w(%PhysicistsQueue{
+      working_copy: front_,
+      length_f: queue.length_f + queue.length_r,
+      front: Suspension.create(Kernel, :++, [front_, :lists.reverse(queue.rear)]),
+      length_r: 0,
+      rear: []
+    })
+  end
+
+  defp check_w(%PhysicistsQueue{working_copy: [], front: front} = queue),
+    do: %PhysicistsQueue{queue | working_copy: Suspension.force(front)}
+
+  defp check_w(queue), do: queue
 end
