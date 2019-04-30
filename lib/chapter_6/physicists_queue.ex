@@ -52,4 +52,11 @@ defmodule PhysicistsQueue do
       rear: []
     }
   end
+
+  @doc """
+  Returns true for empty queues.
+  """
+  @spec empty?(t(any)) :: boolean
+  def empty?(%PhysicistsQueue{length_f: 0}), do: true
+  def empty?(_), do: false
 end
