@@ -74,4 +74,21 @@ defmodule PhysicistsQueueTest do
       assert {:error, :empty} = Queue.head(Queue.empty())
     end
   end
+
+  describe "tail/1" do
+    test "removes the front element from the queue and wraps the result in an ok tuple for non-empty queues" do
+      queue =
+        Queue.empty()
+        |> Queue.snoc(1)
+        |> Queue.snoc(2)
+        |> Queue.snoc(3)
+
+      assert {:ok, tail} = Queue.tail(queue)
+      assert tail.length_f == 2
+    end
+
+    test "returns an error tuple for empty lists" do
+      assert {:error, :empty} = Queue.tail(Queue.empty())
+    end
+  end
 end

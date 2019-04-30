@@ -77,6 +77,24 @@ defmodule PhysicistsQueue do
   def head(%PhysicistsQueue{working_copy: []}), do: {:error, :empty}
   def head(%PhysicistsQueue{working_copy: [head | _]}), do: {:ok, head}
 
+  @doc """
+  Removes the front element from the queue and wraps the result
+  in an ok tuple for non-empty queues. Returns an error tuple
+  otherwise.
+  """
+  @spec tail(t(any)) :: {:ok, t(any)} | {:error, :empty}
+  def tail(%PhysicistsQueue{working_copy: []}), do: {:error, :empty}
+
+  def tail(%PhysicistsQueue{working_copy: [_ | tail]} = queue) do
+    {:ok,
+     check(%PhysicistsQueue{
+       queue
+       | working_copy: tail,
+         length_f: queue.length_f - 1,
+         front: Suspension.create(Kernel, :tl, [Suspension.force(queue.front)])
+     })}
+  end
+
   defp check(%PhysicistsQueue{length_f: front, length_r: rear} = queue) when rear <= front,
     do: check_w(queue)
 
