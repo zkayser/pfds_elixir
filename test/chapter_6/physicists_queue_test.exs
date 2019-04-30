@@ -64,4 +64,14 @@ defmodule PhysicistsQueueTest do
              }
     end
   end
+
+  describe "head/1" do
+    test "returns an ok tuple with the front element in the queue for non-empty queues" do
+      assert {:ok, 1} = Queue.snoc(Queue.empty(), 1) |> Queue.head()
+    end
+
+    test "returns an error tuple when passed an empty queue" do
+      assert {:error, :empty} = Queue.head(Queue.empty())
+    end
+  end
 end

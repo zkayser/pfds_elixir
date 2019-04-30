@@ -68,6 +68,15 @@ defmodule PhysicistsQueue do
     do:
       check(%PhysicistsQueue{queue | length_r: queue.length_r + 1, rear: [element | queue.rear]})
 
+  @doc """
+  Returns the front element in the queue wrapped in an
+  ok tuple for non-empty queues. Otherwise returns an
+  error tuple.
+  """
+  @spec head(t(any)) :: {:ok, any} | {:error, :empty}
+  def head(%PhysicistsQueue{working_copy: []}), do: {:error, :empty}
+  def head(%PhysicistsQueue{working_copy: [head | _]}), do: {:ok, head}
+
   defp check(%PhysicistsQueue{length_f: front, length_r: rear} = queue) when rear <= front,
     do: check_w(queue)
 
