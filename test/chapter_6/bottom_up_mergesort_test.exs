@@ -50,4 +50,22 @@ defmodule BottomUpMergeSortTest do
       assert new_collection.size == 1
     end
   end
+
+  describe "sort/1" do
+    test "is a no-op when the collection is empty" do
+      assert Sortable.sort(Sortable.init()) == []
+    end
+
+    test "sorts the collection into an ordered list" do
+      collection =
+        Sortable.init()
+        |> Sortable.add(14)
+        |> Sortable.add(4)
+        |> Sortable.add(24)
+        |> Sortable.add(1)
+        |> Sortable.add(7)
+
+      assert Sortable.sort(collection) == [1, 4, 7, 14, 24]
+    end
+  end
 end

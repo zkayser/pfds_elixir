@@ -52,6 +52,20 @@ defmodule BottomUpMergeSort do
     }
   end
 
+  @doc """
+  Sorts the segments in the sortable collection.
+  """
+  @spec sort(t(any)) :: list(any)
+  def sort(%__MODULE__{} = collection) do
+    mrgAll([], Suspension.force(collection.segments))
+  end
+
+  defp mrgAll(acc, []), do: acc
+
+  defp mrgAll(acc, [segment | segments]) do
+    mrgAll(mrg(acc, segment), segments)
+  end
+
   @spec add_segment(list(any), list(any), non_neg_integer) :: list(any)
   def add_segment(seg, segs, size) when rem(size, 2) == 0, do: [seg | segs]
 
