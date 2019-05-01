@@ -96,7 +96,7 @@ defmodule LazyPairingHeap do
   """
   @spec insert(t(any), any) :: t(any)
   def insert(heap, element) do
-    %PairingHeap{root: element, single_child: :empty, children: Suspension.create(:empty)}
+    singleton(element)
     |> merge(heap)
   end
 end
