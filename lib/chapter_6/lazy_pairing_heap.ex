@@ -55,4 +55,26 @@ defmodule LazyPairingHeap do
   @spec merge(t(any), t(any)) :: t(any)
   def merge(heap, :empty), do: heap
   def merge(:empty, heap), do: heap
+
+  def merge(%PairingHeap{root: x} = heap_1, %PairingHeap{root: y} = heap_2) when x <= y do
+    link(heap_1, heap_2)
+  end
+
+  def merge(heap_1, heap_2), do: link(heap_2, heap_1)
+
+  defp link(%PairingHeap{single_child: :empty} = heap, heap_2) do
+    %PairingHeap{heap | single_child: heap_2}
+  end
+
+  defp link(heap, heap_2) do
+    %PairingHeap{
+      heap
+      | single_child: empty(),
+        children:
+          Suspension.create(__MODULE__, :merge, [
+            merge(heap_2, heap.single_child),
+            Suspension.force(heap.children)
+          ])
+    }
+  end
 end

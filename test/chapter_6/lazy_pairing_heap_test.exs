@@ -24,5 +24,21 @@ defmodule LazyPairingHeapTest do
       assert Heap.merge(heap, Heap.empty()) == heap
       assert Heap.merge(Heap.empty(), heap) == heap
     end
+
+    test "keeps the lower element as root of the new heap when merging" do
+      heap = %Heap{root: 1, single_child: :empty, children: Suspension.create(:empty)}
+      heap_2 = %Heap{root: 2, single_child: :empty, children: Suspension.create(:empty)}
+
+      result = Heap.merge(heap, heap_2)
+      assert result.root == 1
+    end
+
+    test "creates a suspension for the child merge step" do
+      heap = %Heap{root: 1, single_child: :empty, children: Suspension.create(:empty)}
+      heap_2 = %Heap{root: 2, single_child: :empty, children: Suspension.create(:empty)}
+
+      result = Heap.merge(heap, heap_2)
+      assert %Suspension{} = result.children
+    end
   end
 end
