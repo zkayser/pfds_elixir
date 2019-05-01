@@ -48,4 +48,11 @@ defmodule LazyPairingHeap do
   @spec empty?(t(any)) :: boolean
   def empty?(:empty), do: true
   def empty?(%PairingHeap{}), do: false
+
+  @doc """
+  Merges two pairing heaps together.
+  """
+  @spec merge(t(any), t(any)) :: t(any)
+  def merge(heap, :empty), do: heap
+  def merge(:empty, heap), do: heap
 end

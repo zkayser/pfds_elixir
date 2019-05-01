@@ -17,4 +17,12 @@ defmodule LazyPairingHeapTest do
       refute Heap.empty?(%Heap{root: 1})
     end
   end
+
+  describe "merge/2" do
+    test "returns the non-empty heap if given one empty and one non-empty heap" do
+      heap = %Heap{root: 1}
+      assert Heap.merge(heap, Heap.empty()) == heap
+      assert Heap.merge(Heap.empty(), heap) == heap
+    end
+  end
 end
