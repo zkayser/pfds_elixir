@@ -25,7 +25,7 @@ defmodule LazyPairingHeap do
 
   #-----------------------------------------------------------------
   """
-
+  alias __MODULE__, as: PairingHeap
   defstruct [:root, :single_child, :children]
 
   @type t(a) ::
@@ -41,4 +41,11 @@ defmodule LazyPairingHeap do
   """
   @spec empty :: t(any)
   def empty, do: :empty
+
+  @doc """
+  Returns true only for empty heaps.
+  """
+  @spec empty?(t(any)) :: boolean
+  def empty?(:empty), do: true
+  def empty?(%PairingHeap{}), do: false
 end
