@@ -99,4 +99,14 @@ defmodule LazyPairingHeap do
     singleton(element)
     |> merge(heap)
   end
+
+  @doc """
+  Finds the minimum element in the heap
+  and returns it wrapped in an ok tuple,
+  or returns an error tuple if the heap
+  is empty.
+  """
+  @spec find_min(t(any)) :: {:ok, any} | {:error, :empty}
+  def find_min(:empty), do: {:error, :empty}
+  def find_min(%PairingHeap{root: root}), do: {:ok, root}
 end

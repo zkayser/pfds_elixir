@@ -59,4 +59,22 @@ defmodule LazyPairingHeapTest do
              }
     end
   end
+
+  describe "find_min/1" do
+    test "returns the minimum element wrapped in an ok tuple for non-empty heaps" do
+      heap =
+        Heap.empty()
+        |> Heap.insert(2)
+        |> Heap.insert(6)
+        |> Heap.insert(1)
+        |> Heap.insert(14)
+        |> Heap.insert(9)
+
+      assert {:ok, 1} = Heap.find_min(heap)
+    end
+
+    test "returns an error tuple for empty heaps" do
+      assert {:error, :empty} = Heap.find_min(Heap.empty())
+    end
+  end
 end
