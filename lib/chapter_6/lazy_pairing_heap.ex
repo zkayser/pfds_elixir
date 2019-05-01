@@ -109,4 +109,18 @@ defmodule LazyPairingHeap do
   @spec find_min(t(any)) :: {:ok, any} | {:error, :empty}
   def find_min(:empty), do: {:error, :empty}
   def find_min(%PairingHeap{root: root}), do: {:ok, root}
+
+  @doc """
+  Removes the minimum element from the heap
+  and merges the children together, wrapping
+  the result in an ok tuple for non-empty
+  heaps. Returns an error tuple if the heap
+  is empty.
+  """
+  @spec delete_min(t(any)) :: {:ok, t(any)} | {:error, :empty}
+  def delete_min(:empty), do: {:error, :empty}
+
+  def delete_min(%PairingHeap{single_child: single, children: children}) do
+    {:ok, merge(single, Suspension.force(children))}
+  end
 end

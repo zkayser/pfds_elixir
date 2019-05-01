@@ -77,4 +77,23 @@ defmodule LazyPairingHeapTest do
       assert {:error, :empty} = Heap.find_min(Heap.empty())
     end
   end
+
+  describe "delete_min/1" do
+    test "removes the minimum element and merges the children heaps, wrapping the result in an ok tuple" do
+      heap =
+        Heap.empty()
+        |> Heap.insert(2)
+        |> Heap.insert(6)
+        |> Heap.insert(1)
+        |> Heap.insert(14)
+        |> Heap.insert(9)
+
+      assert {:ok, heap} = Heap.delete_min(heap)
+      assert heap.root == 2
+    end
+
+    test "returns an error tuple for empty heaps" do
+      assert {:error, :empty} = Heap.delete_min(Heap.empty())
+    end
+  end
 end
