@@ -50,6 +50,19 @@ defmodule LazyPairingHeap do
   def empty?(%PairingHeap{}), do: false
 
   @doc """
+  Creates a pairing heap with a single root
+  element and no children.
+  """
+  @spec singleton(any) :: t(any)
+  def singleton(element) do
+    %PairingHeap{
+      root: element,
+      single_child: empty(),
+      children: Suspension.create(empty())
+    }
+  end
+
+  @doc """
   Merges two pairing heaps together.
   """
   @spec merge(t(any), t(any)) :: t(any)

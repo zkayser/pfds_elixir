@@ -49,4 +49,14 @@ defmodule LazyPairingHeapTest do
       assert Heap.insert(Heap.empty(), 1) == expected
     end
   end
+
+  describe "singleton/1" do
+    test "creates a heap with a single element and no children" do
+      assert Heap.singleton(1) == %Heap{
+               root: 1,
+               single_child: :empty,
+               children: Suspension.create(:empty)
+             }
+    end
+  end
 end
