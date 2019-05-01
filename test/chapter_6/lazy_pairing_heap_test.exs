@@ -41,4 +41,12 @@ defmodule LazyPairingHeapTest do
       assert %Suspension{} = result.children
     end
   end
+
+  describe "insert/2" do
+    test "places an element into the heap" do
+      expected = %Heap{root: 1, single_child: :empty, children: Suspension.create(:empty)}
+
+      assert Heap.insert(Heap.empty(), 1) == expected
+    end
+  end
 end

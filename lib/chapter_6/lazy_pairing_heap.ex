@@ -77,4 +77,13 @@ defmodule LazyPairingHeap do
           ])
     }
   end
+
+  @doc """
+  Inserts an element into the pairing heap.
+  """
+  @spec insert(t(any), any) :: t(any)
+  def insert(heap, element) do
+    %PairingHeap{root: element, single_child: :empty, children: Suspension.create(:empty)}
+    |> merge(heap)
+  end
 end
