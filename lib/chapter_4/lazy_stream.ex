@@ -33,7 +33,7 @@ defmodule LazyStream do
   @doc """
   Converts a stream into a list
   """
-  def to_list(stream) do
+  deflazy to_list(stream) do
     to_list_(stream, [])
   end
 

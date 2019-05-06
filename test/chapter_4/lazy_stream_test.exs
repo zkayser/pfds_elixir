@@ -119,9 +119,11 @@ defmodule LazyStreamTest do
       assert stream
              |> Stream.reverse()
              |> Lazy.eval()
-             |> Stream.to_list() ==
+             |> Stream.to_list()
+             |> Lazy.eval() ==
                Stream.from_list(for x <- 5..1, do: x)
                |> Stream.to_list()
+               |> Lazy.eval()
     end
   end
 
@@ -140,7 +142,7 @@ defmodule LazyStreamTest do
     test "turns a stream into a list" do
       stream = Stream.from_list([1, 2, 3])
 
-      assert Stream.to_list(stream) == [1, 2, 3]
+      assert Lazy.eval(Stream.to_list(stream)) == [1, 2, 3]
     end
   end
 end
